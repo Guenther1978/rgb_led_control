@@ -13,7 +13,7 @@ void RgbLedControl::setup()
     led[i].setGlobalFactor(0xFF);
     led[i].setNewFactorAtMin(true);
     led[i].setNewFactorAtMax(false);
-    led[i].setNewMaxPointerAtMin(true);
+    led[i].setNewMaxPointerAtMin(false);
     led[i].setNewMinPointerAtMax(false);
     led[i].setProgmemIndex(1);
   }
@@ -44,7 +44,7 @@ void RgbLedControl::loop()
       if (led[i].getDarkerHasChanged())
       {
         led[i].setSpeedControlDuration(random(DURATION_MAX) + 1);
-        if (led[i].getIntensityOrPointerAtMax())
+        if (led[i].getPointerIsAtMax())
           {
             if (led[i].getNewFactorAtMax())
               {
@@ -59,7 +59,7 @@ void RgbLedControl::loop()
                   }
               }
           }
-        else if (led[i].getIntensityOrPointerAtMin())
+        else if (led[i].getPointerIsAtMin())
           {
             if (led[i].getNewFactorAtMin())
               {

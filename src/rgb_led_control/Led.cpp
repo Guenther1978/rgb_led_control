@@ -6,7 +6,7 @@
 
 // _number
 
-uint8_t Led::getNumber()
+uint8_t Led::getNumber(void)
 {
   return _number;
 }
@@ -17,9 +17,22 @@ void Led::setNumber(uint8_t number)
 }
 
 
+/* color */
+
+unsigned char Led::getColor(void)
+{
+  return _color;
+}
+
+void Led::setColor(unsigned char color)
+{
+  _color = color;
+}
+
+
 // _pointer
 
-uint8_t Led::getPointer()
+uint8_t Led::getPointer(void)
 {
   return _pointer;
 }
@@ -29,7 +42,7 @@ void Led::setPointer(uint8_t pointer)
   _pointer = pointer;
 }
 
-uint8_t Led::getMinPointer()
+uint8_t Led::getMinPointer(void)
 {
   return _pointerMin;
 }
@@ -38,29 +51,6 @@ void Led::setMinPointer(uint8_t pointerMin)
 {
   _pointerMin = pointerMin;
 }
-
-uint8_t Led::getMaxPointer()
-{
-  return _pointerMax;
-}
-
-void Led::setMaxPointer(uint8_t pointerMax)
-{
-  _pointerMax = pointerMax;
-}
-
-uint8_t Led::getProgmemIndex()
-{
-  return _progmemIndex;
-}
-
-void Led::setProgmemIndex(uint8_t number)
-{
-  _progmemIndex = number;
-}
-
-
-// new Pointer
 
 bool Led::getNewMinPointerAtMax(void)
 {
@@ -77,10 +67,24 @@ void Led::toggleNewMinPointerAtMax(void)
   _newMinPointerAtMax =! _newMinPointerAtMax;
   if (_newMinPointerAtMax == false)
     {
-      _pointerMin = _defaultPointerMin;
+      setMinPointer2Default();
     }
 }
 
+void Led::setMinPointer2Default(void)
+{
+  _pointerMin = _defaultPointerMin;
+}
+
+uint8_t Led::getMaxPointer()
+{
+  return _pointerMax;
+}
+
+void Led::setMaxPointer(uint8_t pointerMax)
+{
+  _pointerMax = pointerMax;
+}
 bool Led::getNewMaxPointerAtMin(void)
 {
   return _newMaxPointerAtMin;
@@ -99,6 +103,12 @@ void Led::toggleNewMaxPointerAtMin(void)
       _pointerMax = _defaultPointerMax;
     }
 }
+
+void Led::setMaxPointer2Default(void)
+{
+  _pointerMin = _defaultPointerMin;
+}
+
 
 
 // _factor
@@ -190,56 +200,14 @@ bool Led::getDarkerHasChanged()
   return _darkerHasChanged;
 }
 
-bool Led::getIntensityOrPointerAtMin()
+bool Led::getPointerIsAtMin()
 {
-  return _intensityOrPointerAtMin;
+  return _pointerIsAtMin;
 }
 
-bool Led::getIntensityOrPointerAtMax()
+bool Led::getPointerIsAtMax()
 {
-  return _intensityOrPointerAtMax;
-}
-
-
-//////////////////////////////////////
-// methods dealing with the intensity
-//////////////////////////////////////
-
-void Led::increaseIntensity()
-{
-  _intensity ++;
-  if (_intensity == _intensityMax)
-    {
-      _intensityOrPointerAtMin = false;
-      _intensityOrPointerAtMax = true;
-      _darker = true;
-      _darkerHasChanged = true;
-    }
-}
-
-void Led::decreaseIntensity()
-{
-  _intensity --;
-  if (_intensity == _intensityMin)
-    {
-      _intensityOrPointerAtMin = true;
-      _intensityOrPointerAtMax = false;
-      _darker = true;
-      _darkerHasChanged = true;
-    }
-}
-
-void Led::changeIntensity()
-{
-  _darkerHasChanged = false;
-  if (_darker)
-    {
-      decreaseIntensity();
-    }
-  else
-    {
-      increaseIntensity();
-    }
+  return _pointerIsAtMax;
 }
 
 
@@ -252,8 +220,8 @@ void Led::increasePointer()
   _pointer ++;
   if (_pointer == _pointerMax)
     {
-      _intensityOrPointerAtMin = false;
-      _intensityOrPointerAtMax = true;
+      _pointerIsAtMin = false;
+      _pointerIsAtMax = true;
       _darker = true;
       _darkerHasChanged = true;
     }
@@ -262,10 +230,10 @@ void Led::increasePointer()
 void Led::decreasePointer()
 {
   _pointer --;
-  if (_pointer == 0)
+  if (_pointer == _pointerMin)
     {
-      _intensityOrPointerAtMin = true;
-      _intensityOrPointerAtMax = false;      
+      _pointerIsAtMin = true;
+      _pointerIsAtMax = false;
       _darker = false;
       _darkerHasChanged = true;
     }
@@ -282,39 +250,6 @@ void Led::changePointer()
     {
       increasePointer();
     }
-}
-
-void Led::pointer2int()
-{
-  uint8_t content;
-  uint8_t product;
-  uint8_t sum;
-  
-  switch(_progmemIndex)
-    {
-    case 0:
-      content = pgm_read_word_near(intensities_0 + _pointer);
-      break;
-    case 1:
-      content = pgm_read_word_near(intensities_1 + _pointer);
-      break;
-    case 2:
-      content = pgm_read_word_near(intensities_2 + _pointer);
-      break;
-    case 3:
-      content = pgm_read_word_near(intensities_3 + _pointer);
-      break;
-    case 4:
-      content = pgm_read_word_near(intensities_4 + _pointer);
-      break;
-
-    default:
-      break;
-    }
-  
-  product = (uint8_t)(255 - content) * _factor >> 8;
-  sum = 255 -  product;
-  _intensity = (uint8_t)_globalFactor * sum >> 8;
 }
 
 
@@ -345,4 +280,62 @@ void Led::setSpeedControlCounter(uint8_t counter)
 uint8_t Led::getSpeedControlCounter()
 {
   return speedControl.getCounter();
+}
+
+
+////////////////////////////////////////////////
+// methods of the class Led8bit
+////////////////////////////////////////////////
+
+uint8_t Led8bit::getProgmemIndex()
+{
+  return _progmemIndex;
+}
+
+void Led8bit::setProgmemIndex(uint8_t number)
+{
+  _progmemIndex = number;
+}
+
+void Led8bit::pointer2int()
+{
+  uint8_t content;
+  uint8_t product;
+  uint8_t sum;
+
+  switch(_progmemIndex)
+    {
+    case 0:
+      content = pgm_read_word_near(intensities_0 + _pointer);
+      break;
+    case 1:
+      content = pgm_read_word_near(intensities_1 + _pointer);
+      break;
+    case 2:
+      content = pgm_read_word_near(intensities_2 + _pointer);
+      break;
+    case 3:
+      content = pgm_read_word_near(intensities_3 + _pointer);
+      break;
+    case 4:
+      content = pgm_read_word_near(intensities_4 + _pointer);
+      break;
+
+    default:
+      break;
+    }
+
+  product = (uint8_t)(255 - content) * _factor >> 8;
+  sum = 255 -  product;
+  _intensity = (uint8_t)_globalFactor * sum >> 8;
+}
+
+uint8_t Led8bit::getIntensity(void)
+{
+  return _intensity;
+}
+
+void Led8bit::setIntensity(uint8_t intensity)
+{
+  _intensity = intensity;
 }

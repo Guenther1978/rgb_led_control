@@ -26,7 +26,7 @@
 class RgbLedControl
 {
 private:
-  Led led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
+  Led8bit led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;
