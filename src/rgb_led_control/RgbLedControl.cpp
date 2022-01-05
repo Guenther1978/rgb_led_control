@@ -16,6 +16,7 @@ void RgbLedControl::setup()
     led[i].setNewMaxPointerAtMin(false);
     led[i].setNewMinPointerAtMax(false);
     led[i].setProgmemIndex(1);
+    led[i].setPin(pwm_pins[i]);
   }
 
   oldMillis = millis();

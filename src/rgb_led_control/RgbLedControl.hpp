@@ -3,6 +3,7 @@
 #ifndef RGB_LED_CONTROL_H
 #define RGB_LED_CONTROL_H
 
+#include <stdint.h>
 #include <Arduino.h>
 #include <Wire.h>
 #include <EEPROM.h>

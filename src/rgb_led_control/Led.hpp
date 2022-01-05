@@ -5,6 +5,8 @@
 #include "intensities.h"
 #include "SpeedControl.hpp"
 
+const uint8_t pwm_pins[] = {3, 5, 6, 9, 10, 11};
+
 class Led
 {
 private:
@@ -26,6 +28,7 @@ private:
   bool _pointerIsAtMin = false;
 
 protected:
+  uint8_t _progmemIndex = 0;
   uint8_t _pointer = 0;
   uint8_t _factor = 0xFF;
   uint8_t _globalFactor = 0xFF;
@@ -52,6 +55,12 @@ public:
 
   /** @param color of this LED */
   void setColor(unsigned char);
+
+  /** @return index of the table of intensities */
+  uint8_t getProgmemIndex(void);
+
+  /** @param intex of the table of intensitiies */
+  void setProgmemIndex(uint8_t);
 
 
   /* pointer */
@@ -216,29 +225,32 @@ public:
 class Led8bit : public Led
 {
 private:
+  uint8_t _pin;
   uint8_t _intensity = 0xFF;
-  uint8_t _progmemIndex = 0;
 
 public:
+  /** @return pin */
+  uint8_t getPin(void);
+
+  /** @param pin */
+  void setPin(uint8_t);
+
   /** @return intensity */
   uint8_t getIntensity(void);
 
   /** @param intensity */
   void setIntensity(uint8_t);
 
-  /** @return index of the table of intensities */
-  uint8_t getProgmemIndex(void);
-
-  /** @param intex of the table of intensitiies */
-  void setProgmemIndex(uint8_t);
-
-  /**@return the content of the PROGMEM array.
+  /** @brief copy the content of the PROGMEM array to the intensity
    *
    * The array with the intensities is included in the header file
    * 'intensities.h'. This file has been created by the python
    * script 'progmen_creator.py'.
    */
   void pointer2int(void);
+
+  /** @brief send the intensity to the output periphic */
+  void int2output(void);
 };
 
 #endif

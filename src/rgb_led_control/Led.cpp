@@ -30,6 +30,19 @@ void Led::setColor(unsigned char color)
 }
 
 
+/* progmem_index */
+
+uint8_t Led::getProgmemIndex()
+{
+  return _progmemIndex;
+}
+
+void Led::setProgmemIndex(uint8_t number)
+{
+  _progmemIndex = number;
+}
+
+
 // _pointer
 
 uint8_t Led::getPointer(void)
@@ -287,14 +300,25 @@ uint8_t Led::getSpeedControlCounter()
 // methods of the class Led8bit
 ////////////////////////////////////////////////
 
-uint8_t Led8bit::getProgmemIndex()
+
+uint8_t Led8bit::getPin(void)
 {
-  return _progmemIndex;
+  return _pin;
 }
 
-void Led8bit::setProgmemIndex(uint8_t number)
+void Led8bit::setPin(uint8_t pin)
 {
-  _progmemIndex = number;
+    _pin = pin;
+}
+
+uint8_t Led8bit::getIntensity(void)
+{
+  return _intensity;
+}
+
+void Led8bit::setIntensity(uint8_t intensity)
+{
+  _intensity = intensity;
 }
 
 void Led8bit::pointer2int()
@@ -306,19 +330,22 @@ void Led8bit::pointer2int()
   switch(_progmemIndex)
     {
     case 0:
-      content = pgm_read_word_near(intensities_0 + _pointer);
+      content = pgm_read_word_near(intensities_8bit_0 + _pointer);
       break;
     case 1:
-      content = pgm_read_word_near(intensities_1 + _pointer);
+      content = pgm_read_word_near(intensities_8bit_1 + _pointer);
       break;
     case 2:
-      content = pgm_read_word_near(intensities_2 + _pointer);
+      content = pgm_read_word_near(intensities_8bit_2 + _pointer);
       break;
     case 3:
-      content = pgm_read_word_near(intensities_3 + _pointer);
+      content = pgm_read_word_near(intensities_8bit_3 + _pointer);
       break;
     case 4:
-      content = pgm_read_word_near(intensities_4 + _pointer);
+      content = pgm_read_word_near(intensities_8bit_4 + _pointer);
+      break;
+    case 5:
+      content = pgm_read_word_near(intensities_8bit_5 + _pointer);
       break;
 
     default:
@@ -330,12 +357,7 @@ void Led8bit::pointer2int()
   _intensity = (uint8_t)_globalFactor * sum >> 8;
 }
 
-uint8_t Led8bit::getIntensity(void)
+void Led8bit::int2output(void)
 {
-  return _intensity;
-}
-
-void Led8bit::setIntensity(uint8_t intensity)
-{
-  _intensity = intensity;
+  analogWrite(_pin, _intensity);
 }
