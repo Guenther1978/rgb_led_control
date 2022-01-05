@@ -1,6 +1,6 @@
 #include "RgbLedControl.hpp"
 
-RgbLedControl rgbLedControl();
+RgbLedControl rgbLedControl;
 
 void setup()
 {
