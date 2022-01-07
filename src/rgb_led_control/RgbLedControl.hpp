@@ -10,6 +10,11 @@
 #include <SoftwareSerial.h>
 #include "Led.hpp"
 #include "SpeedControl.hpp"
+#include "PwmSource.h"
+
+#ifdef PCA9685
+#include <Adafruit_PWMServoDriver.h>
+#endif
 
 #define NUMBER_OF_LEDS 3
 #define NUMBER_OF_PROGMEMS 10
@@ -27,7 +32,12 @@
 class RgbLedControl
 {
 private:
+  #ifdef PCA9685
+  Led16bit led[NUMBER_OF_LEDS];
+  Adafruit_PWMServoDriver pwm;
+  #else
   Led8bit led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
+  #endif
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;

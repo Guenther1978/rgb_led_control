@@ -311,6 +311,11 @@ void Led8bit::setPin(uint8_t pin)
     _pin = pin;
 }
 
+void Led8bit::setPin2default(void)
+{
+  _pin = pwmPins[_number];
+}
+
 uint8_t Led8bit::getIntensity(void)
 {
   return _intensity;
@@ -360,4 +365,54 @@ void Led8bit::pointer2int()
 void Led8bit::int2output(void)
 {
   analogWrite(_pin, _intensity);
+}
+
+////////////////////////////////////////////////
+// methods of the class Led16bit
+////////////////////////////////////////////////
+
+uint16_t Led16bit::getIntensity(void)
+{
+  return _intensity;
+}
+
+void Led16bit::setIntensity(uint16_t intensity)
+{
+  _intensity = intensity;
+}
+
+void Led16bit::pointer2int()
+{
+  uint16_t content;
+  uint16_t product;
+  uint16_t sum;
+
+  switch(_progmemIndex)
+    {
+    case 0:
+      content = pgm_read_word_near(intensities_12bit_0 + _pointer);
+      break;
+    case 1:
+      content = pgm_read_word_near(intensities_12bit_1 + _pointer);
+      break;
+    case 2:
+      content = pgm_read_word_near(intensities_12bit_2 + _pointer);
+      break;
+    case 3:
+      content = pgm_read_word_near(intensities_12bit_3 + _pointer);
+      break;
+    case 4:
+      content = pgm_read_word_near(intensities_12bit_4 + _pointer);
+      break;
+    case 5:
+      content = pgm_read_word_near(intensities_12bit_5 + _pointer);
+      break;
+
+    default:
+      break;
+    }
+
+  product = (uint16_t)((content) * ((_factor << 8) + 0xF)) >> 4;
+  sum = 0x0FFF -  product;
+  _intensity = (uint16_t)sum;
 }

@@ -2,17 +2,18 @@
 #define LED_H
 
 #include <Arduino.h>
+#include <Wire.h>
 #include "intensities.h"
 #include "SpeedControl.hpp"
+#include "PwmSource.h"
 
-const uint8_t pwm_pins[] = {3, 5, 6, 9, 10, 11};
+const uint8_t pwmPins[] = {3, 5, 6, 9, 10, 11};
 
 class Led
 {
 private:
   SpeedControl speedControl;
   unsigned char _color = ' ';
-  uint8_t _number = 0;
   uint8_t _pointerMin = 0;
   uint8_t _pointerMax = 255;
   uint8_t _defaultPointerMin = 0;
@@ -28,6 +29,7 @@ private:
   bool _pointerIsAtMin = false;
 
 protected:
+  uint8_t _number = 0;
   uint8_t _progmemIndex = 0;
   uint8_t _pointer = 0;
   uint8_t _factor = 0xFF;
@@ -36,7 +38,7 @@ protected:
 
 public:
   ///////////////////////
-  // get ans set methods
+  // get and set methods
   ///////////////////////
 
   /* number */
@@ -235,11 +237,38 @@ public:
   /** @param pin */
   void setPin(uint8_t);
 
+  /** @brief set pin to one of the pwm outputs */
+  void setPin2default(void);
+
   /** @return intensity */
   uint8_t getIntensity(void);
 
   /** @param intensity */
   void setIntensity(uint8_t);
+
+  /** @brief copy the content of the PROGMEM array to the intensity
+   *
+   * The array with the intensities is included in the header file
+   * 'intensities.h'. This file has been created by the python
+   * script 'progmen_creator.py'.
+   */
+  void pointer2int(void);
+
+  /** @brief send the intensity to the output periphic */
+  void int2output(void);
+};
+
+class Led16bit : public Led
+{
+private:
+  uint16_t _intensity = 0x0FFF;
+
+public:
+  /** @return intensity */
+  uint16_t getIntensity(void);
+
+  /** @param intensity */
+  void setIntensity(uint16_t);
 
   /** @brief copy the content of the PROGMEM array to the intensity
    *

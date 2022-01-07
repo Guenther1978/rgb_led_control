@@ -16,7 +16,9 @@ void RgbLedControl::setup()
     led[i].setNewMaxPointerAtMin(false);
     led[i].setNewMinPointerAtMax(false);
     led[i].setProgmemIndex(1);
-    led[i].setPin(pwm_pins[i]);
+    #ifndef PCA9685
+    led[i].setPin2default();
+    #endif
   }
 
   oldMillis = millis();
@@ -27,7 +29,11 @@ void RgbLedControl::setup()
   readEeprom();
   
   bluetoothCommunicator.begin(9600);
-  
+
+  #ifdef PCA9685
+  pwm.begin();
+  #endif
+
   Serial.begin(9600);
   while (!Serial);
   Serial.println("Setup completed");
@@ -76,18 +82,23 @@ void RgbLedControl::loop()
               }
           }
       }
-      switch(i)
-        {
-        case 0:
-          analogWrite(3, led[0].getIntensity());
-          break;
-        case 1:
-          analogWrite(5, led[1].getIntensity());
-          break;
-        case 2:
-          analogWrite(6, led[2].getIntensity());
-          break;
-        }
+//      switch(i)
+//        {
+//        case 0:
+//          analogWrite(3, led[0].getIntensity());
+//          break;
+//        case 1:
+//          analogWrite(5, led[1].getIntensity());
+//          break;
+//        case 2:
+//          analogWrite(6, led[2].getIntensity());
+//          break;
+//        }
+      #ifdef PCA9685
+      pwm.setPWM(led[i].getNumber(), 0, led[i].getIntensity());
+      #else
+      led[i].int2output();
+      #endif
     }
   }
   loopDuration = millis() - oldMillis;
