@@ -123,7 +123,7 @@ for index in range(size):
 
 f.write("};\n")
 
-name = "const PROGMEM uint8_t intensities_12bit_" + str(4) + "[] = {";
+name = "const PROGMEM uint16_t intensities_12bit_" + str(4) + "[] = {";
 f.write(name)
 expo = peak2peak**(1 / (size - 1))
 for index in range(size):
