@@ -30,6 +30,39 @@ void Led::setColor(unsigned char color)
 }
 
 
+/* Waiting */
+
+bool Led::getWaitAtMax(void)
+  {
+    return _waitAtMax;
+  }
+
+void Led::setWaitAtMax(bool waitAtMax)
+  {
+    _waitAtMax = waitAtMax;
+  }
+
+void Led::toggleWaitAtMax(void)
+{
+  _waitAtMax != _waitAtMax;
+}
+
+bool Led::getWaitAtMin(void)
+  {
+    return _waitAtMin;
+  }
+
+void Led::setWaitAtMin(bool waitAtMin)
+  {
+    _waitAtMin = waitAtMin;
+  }
+
+void Led::toggleWaitAtMin(void)
+{
+  _waitAtMin != _waitAtMin;
+}
+
+
 /* progmem_index */
 
 uint8_t Led::getProgmemIndex()
@@ -384,7 +417,7 @@ void Led16bit::setIntensity(uint16_t intensity)
 void Led16bit::pointer2int()
 {
   uint16_t content;
-  uint16_t product;
+  uint32_t product;
   uint16_t sum;
 
   switch(_progmemIndex)
@@ -412,7 +445,7 @@ void Led16bit::pointer2int()
       break;
     }
 
-  product = (uint16_t)((content) * ((_factor << 8) + 0xF)) >> 4;
+  product = (0x0FFF - content);
   sum = 0x0FFF -  product;
   _intensity = (uint16_t)sum;
 }
