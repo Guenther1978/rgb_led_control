@@ -25,6 +25,8 @@ private:
   bool _newMinPointerAtMax = false;
   bool _newFactorAtMax = false;
   bool _newFactorAtMin = false;
+  bool _waitAtMax = false;
+  bool _waitAtMin = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
 
@@ -63,6 +65,27 @@ public:
 
   /** @param intex of the table of intensitiies */
   void setProgmemIndex(uint8_t);
+
+
+  /* Waiting */
+
+  /** @return waitAtMax */
+  bool getWaitAtMax(void);
+
+  /** @param waitAtMax */
+  void setWaitAtMax(bool waitAtMax);
+
+  /** @brief toggle waitAtMax */
+  void toggleWaitAtMax(void);
+
+  /** @return waitAtMin */
+  bool getWaitAtMin(void);
+
+  /** @param waitAtMax */
+  void setWaitAtMin(bool waitAtMin);
+
+  /** @brief toggle waitAtMin */
+  void toggleWaitAtMin(void);
 
 
   /* pointer */
