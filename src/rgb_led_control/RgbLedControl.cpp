@@ -65,6 +65,17 @@ void RgbLedControl::loop()
                     led[i].setMinPointer(number);
                   }
               }
+            if (led[i].getWaitAtMax())
+              {
+                if (countLedsGettingDarker() == 3)
+                  {
+                    led[i].setPointerIsChangeable(false);
+                  }
+                else
+                  {
+                    led[i].setPointerIsChangeable(true);
+                  }
+              }
           }
         else if (led[i].getPointerIsAtMin())
           {
@@ -80,20 +91,19 @@ void RgbLedControl::loop()
                     led[i].setMaxPointer(number);
                   }
               }
+            if (led[i].getWaitAtMin())
+              {
+                if (countLedsGettingDarker() == 0)
+                  {
+                    led[i].setPointerIsChangeable(false);
+                  }
+                else
+                  {
+                    led[i].setPointerIsChangeable(true);
+                  }
+              }
           }
       }
-//      switch(i)
-//        {
-//        case 0:
-//          analogWrite(3, led[0].getIntensity());
-//          break;
-//        case 1:
-//          analogWrite(5, led[1].getIntensity());
-//          break;
-//        case 2:
-//          analogWrite(6, led[2].getIntensity());
-//          break;
-//        }
       #ifdef PCA9685
       pwm.setPWM(led[i].getNumber(), 0, led[i].getIntensity());
       #else
@@ -148,6 +158,14 @@ void RgbLedControl::loop()
           break;
         case 'r':
         case 'R':
+          toggleWaitAtMax();
+          break;
+        case 's':
+        case 'S':
+          toggleWaitAtMin();
+          break;
+        case 'w':
+        case 'W':
           writeEeprom();
           break;
         default:
@@ -188,14 +206,16 @@ void RgbLedControl::help()
   Serial.println("o: Set a new intensity array");
   Serial.println("p: Toggles if a new factor should be set");
   Serial.println("q: Toggles if a new pointer shoud be set");
-  Serial.println("r: Save the cycle time and the PROGMEM index");
+  Serial.println("r: Toggles waiting at max pointer");
+  Serial.println("s: Toggles waiting at min pointer");
+  Serial.println("w: Save the cycle time and the PROGMEM index");
   Serial.println();
 }
 
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer");
+  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax\twaitAtMin");
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
       Serial.print(led[i].getNumber());
@@ -218,7 +238,11 @@ void RgbLedControl::info()
       Serial.print("\t");
       Serial.print(led[i].getNewFactorAtMin());
       Serial.print("\t\t");
-      Serial.println(led[i].getNewMaxPointerAtMin());
+      Serial.print(led[i].getNewMaxPointerAtMin());
+      Serial.print("\t\t");
+      Serial.print(led[i].getWaitAtMax());
+      Serial.print("\t\t");
+      Serial.println(led[i].getWaitAtMin());
     }
   Serial.println();
   Serial.print("loop duration / ms:\t");
@@ -378,13 +402,44 @@ void RgbLedControl::toggleNewFactor(void)
     }
 }
 
- void RgbLedControl::toggleNewPointer(void)
+void RgbLedControl::toggleNewPointer(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
       led[i].toggleNewMaxPointerAtMin();
     }
 }
+
+void RgbLedControl::toggleWaitAtMax(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleWaitAtMax();
+    }
+}
+
+void RgbLedControl::toggleWaitAtMin(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleWaitAtMin();
+    }
+}
+
+uint8_t RgbLedControl::countLedsGettingDarker(void)
+  {
+    uint8_t sum = 0;
+
+    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        if (led[i].getDarker())
+          {
+            sum ++;
+          }
+      }
+
+    return sum;
+  }
 
 void RgbLedControl::readEeprom()
 {

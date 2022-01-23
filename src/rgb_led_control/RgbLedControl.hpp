@@ -119,7 +119,16 @@ public:
 
   /**@brief This mehtod toggles if the pointer chages.*/
   void toggleNewPointer(void);
-  
+
+  /**@brief This method toggles in waiting or not at the max. pointer */
+  void toggleWaitAtMax(void);
+
+  /**@brief This method toggles in waiting or not at the min. pointer */
+  void toggleWaitAtMin(void);
+
+  /**@brief This methode counts the LEDs which are getting darker */
+  uint8_t countLedsGettingDarker(void);
+
   /**@brief This method reads the content of the EEPROM.
    *
    * The user can set the cycle time and the index of the

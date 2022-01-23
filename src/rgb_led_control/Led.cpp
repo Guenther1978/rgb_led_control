@@ -44,7 +44,7 @@ void Led::setWaitAtMax(bool waitAtMax)
 
 void Led::toggleWaitAtMax(void)
 {
-  _waitAtMax != _waitAtMax;
+  _waitAtMax =! _waitAtMax;
 }
 
 bool Led::getWaitAtMin(void)
@@ -59,7 +59,7 @@ void Led::setWaitAtMin(bool waitAtMin)
 
 void Led::toggleWaitAtMin(void)
 {
-  _waitAtMin != _waitAtMin;
+  _waitAtMin =! _waitAtMin;
 }
 
 
@@ -131,6 +131,7 @@ void Led::setMaxPointer(uint8_t pointerMax)
 {
   _pointerMax = pointerMax;
 }
+
 bool Led::getNewMaxPointerAtMin(void)
 {
   return _newMaxPointerAtMin;
@@ -146,7 +147,7 @@ void Led::toggleNewMaxPointerAtMin(void)
   _newMaxPointerAtMin =! _newMaxPointerAtMin;
   if (_newMaxPointerAtMin == false)
     {
-      _pointerMax = _defaultPointerMax;
+      setMaxPointer2Default();
     }
 }
 
@@ -155,6 +156,15 @@ void Led::setMaxPointer2Default(void)
   _pointerMin = _defaultPointerMin;
 }
 
+bool Led::getPointerIsChangeable(void)
+  {
+    return _pointerIsChangeable;
+  }
+
+void Led::setPointerIsChangeable(bool pointerIsChangeable)
+  {
+    _pointerIsChangeable = pointerIsChangeable;
+  }
 
 
 // _factor
@@ -287,14 +297,17 @@ void Led::decreasePointer()
 
 void Led::changePointer()
 {
-  _darkerHasChanged = false;
-  if (_darker)
+  if (_pointerIsChangeable)
     {
-      decreasePointer();
-    }
-  else
-    {
-      increasePointer();
+      _darkerHasChanged = false;
+      if (_darker)
+        {
+          decreasePointer();
+        }
+      else
+        {
+          increasePointer();
+        }
     }
 }
 

@@ -29,6 +29,7 @@ private:
   bool _waitAtMin = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
+  bool _pointerIsChangeable = true;
 
 protected:
   uint8_t _number = 0;
@@ -131,6 +132,12 @@ public:
 
   /** @brief sets the maximum Pointer to the default value */
   void setMaxPointer2Default(void);
+
+  /** @return changePointer */
+  bool getPointerIsChangeable(void);
+
+  /** @param changePointer */
+  void setPointerIsChangeable(bool);
 
   
   // factors
