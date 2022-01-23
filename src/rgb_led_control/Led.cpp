@@ -446,6 +446,8 @@ void Led16bit::pointer2int()
     }
 
   product = (0x0FFF - content);
+  product *= _factor;
+  product = product >> 8;
   sum = 0x0FFF -  product;
   _intensity = (uint16_t)sum;
 }
