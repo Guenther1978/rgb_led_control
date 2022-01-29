@@ -15,7 +15,11 @@ void RgbLedControl::setup()
     led[i].setNewFactorAtMax(false);
     led[i].setNewMaxPointerAtMin(false);
     led[i].setNewMinPointerAtMax(false);
-    led[i].setProgmemIndex(1);
+    led[i].setWaitAtMax(false);
+    led[i].setWaitAtMin(false);
+    led[i].setStayAtMax(false);
+    led[i].setStayAtMin(true);
+    led[i].setProgmemIndex(0);
     #ifndef PCA9685
     led[i].setPin2default();
     #endif
@@ -76,6 +80,23 @@ void RgbLedControl::loop()
                     led[i].setPointerIsChangeable(true);
                   }
               }
+            if (led[i].getStayAtMax())
+              {
+                if (random(2))
+                  {
+                    for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
+                      {
+                        if (j == i)
+                          {
+                            led[j].setPointerIsChangeable(false);
+                          }
+                        else
+                          {
+                            led[j].setPointerIsChangeable(true);
+                          }
+                      }
+                  }
+              }
           }
         else if (led[i].getPointerIsAtMin())
           {
@@ -100,6 +121,23 @@ void RgbLedControl::loop()
                 else
                   {
                     led[i].setPointerIsChangeable(true);
+                  }
+              }
+            if (led[i].getStayAtMin())
+              {
+                if (random(2))
+                  {
+                    for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
+                      {
+                        if (j == i)
+                          {
+                            led[j].setPointerIsChangeable(false);
+                          }
+                        else
+                          {
+                            led[j].setPointerIsChangeable(true);
+                          }
+                      }
                   }
               }
           }
@@ -164,6 +202,14 @@ void RgbLedControl::loop()
         case 'S':
           toggleWaitAtMin();
           break;
+        case 't':
+        case 'T':
+          toggleStayAtMax();
+          break;
+        case 'u':
+        case 'U':
+          toggleStayAtMin();
+          break;
         case 'w':
         case 'W':
           writeEeprom();
@@ -208,6 +254,8 @@ void RgbLedControl::help()
   Serial.println("q: Toggles if a new pointer shoud be set");
   Serial.println("r: Toggles waiting at max pointer");
   Serial.println("s: Toggles waiting at min pointer");
+  Serial.println("t: Toggles staying at max pointer");
+  Serial.println("u: Toggles staying at min pointer");
   Serial.println("w: Save the cycle time and the PROGMEM index");
   Serial.println();
 }
@@ -215,7 +263,7 @@ void RgbLedControl::help()
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax\twaitAtMin");
+  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax\twaitAtMin\tstayAtMax\tstayAtMin");
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
       Serial.print(led[i].getNumber());
@@ -242,7 +290,11 @@ void RgbLedControl::info()
       Serial.print("\t\t");
       Serial.print(led[i].getWaitAtMax());
       Serial.print("\t\t");
-      Serial.println(led[i].getWaitAtMin());
+      Serial.print(led[i].getWaitAtMin());
+      Serial.print("\t\t");
+      Serial.print(led[i].getStayAtMax());
+      Serial.print("\t\t");
+      Serial.println(led[i].getStayAtMin());
     }
   Serial.println();
   Serial.print("loop duration / ms:\t");
@@ -423,6 +475,22 @@ void RgbLedControl::toggleWaitAtMin(void)
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
       led[i].toggleWaitAtMin();
+    }
+}
+
+void RgbLedControl::toggleStayAtMax(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleStayAtMax();
+    }
+}
+
+void RgbLedControl::toggleStayAtMin(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleStayAtMin();
     }
 }
 

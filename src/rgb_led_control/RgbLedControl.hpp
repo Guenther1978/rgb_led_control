@@ -126,6 +126,12 @@ public:
   /**@brief This method toggles in waiting or not at the min. pointer */
   void toggleWaitAtMin(void);
 
+  /**@brief This method toggles in staying or not at the max. pointer */
+  void toggleStayAtMax(void);
+
+  /**@brief This method toggles in staying or not at the min. pointer */
+  void toggleStayAtMin(void);
+
   /**@brief This methode counts the LEDs which are getting darker */
   uint8_t countLedsGettingDarker(void);
 

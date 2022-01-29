@@ -27,6 +27,8 @@ private:
   bool _newFactorAtMin = false;
   bool _waitAtMax = false;
   bool _waitAtMin = false;
+  bool _stayAtMax = false;
+  bool _stayAtMin = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
   bool _pointerIsChangeable = true;
@@ -88,6 +90,23 @@ public:
   /** @brief toggle waitAtMin */
   void toggleWaitAtMin(void);
 
+  /** @return waitAtMax */
+  bool getStayAtMax(void);
+
+  /** @param waitAtMax */
+  void setStayAtMax(bool waitAtMax);
+
+  /** @brief toggle waitAtMax */
+  void toggleStayAtMax(void);
+
+  /** @return waitAtMin */
+  bool getStayAtMin(void);
+
+  /** @param waitAtMax */
+  void setStayAtMin(bool waitAtMin);
+
+  /** @brief toggle waitAtMin */
+  void toggleStayAtMin(void);
 
   /* pointer */
   

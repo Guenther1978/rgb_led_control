@@ -62,6 +62,35 @@ void Led::toggleWaitAtMin(void)
   _waitAtMin =! _waitAtMin;
 }
 
+bool Led::getStayAtMax(void)
+  {
+    return _stayAtMax;
+  }
+
+void Led::setStayAtMax(bool stayAtMax)
+  {
+    _stayAtMax = stayAtMax;
+  }
+
+void Led::toggleStayAtMax(void)
+{
+  _stayAtMax =! _stayAtMax;
+}
+
+bool Led::getStayAtMin(void)
+  {
+    return _stayAtMin;
+  }
+
+void Led::setStayAtMin(bool stayAtMin)
+  {
+    _stayAtMin = stayAtMin;
+  }
+
+void Led::toggleStayAtMin(void)
+{
+  _stayAtMin =! _stayAtMin;
+}
 
 /* progmem_index */
 
