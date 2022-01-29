@@ -5,7 +5,7 @@ import math
 f = open("intensities.h", "w")
 size = 256
 max_value = 255
-offset = 20
+offset = 1
 peak2peak = max_value - offset
 amplitude = peak2peak / 2
 
