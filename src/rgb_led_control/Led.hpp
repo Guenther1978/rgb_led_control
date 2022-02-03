@@ -19,6 +19,7 @@ private:
   uint8_t _defaultPointerMin = 0;
   uint8_t _defaultPointerMax = 255;
   uint8_t _defaultFactor = 0xFF;
+  uint8_t _offset = 1;
   bool _darker = true;
   bool _darkerHasChanged = false;
   bool _newMaxPointerAtMin = false;
@@ -62,6 +63,18 @@ public:
 
   /** @param color of this LED */
   void setColor(unsigned char);
+
+
+  /* offset */
+
+  /** @retuen the offset of this LED */
+  uint8_t getOffset(void);
+
+  /** @param offset of this LED */
+  void setOffset(uint8_t);
+
+
+  /* progmem index */
 
   /** @return index of the table of intensities */
   uint8_t getProgmemIndex(void);

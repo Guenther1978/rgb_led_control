@@ -30,6 +30,21 @@ void Led::setColor(unsigned char color)
 }
 
 
+/* offset */
+
+uint8_t getOffset(void)
+  {
+    return _offset;
+  }
+
+void setOffset(uint8_t offset)
+  {
+    _offset = offset;
+  }
+
+
+
+
 /* Waiting */
 
 bool Led::getWaitAtMax(void)
