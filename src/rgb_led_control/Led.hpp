@@ -19,7 +19,6 @@ private:
   uint8_t _defaultPointerMin = 0;
   uint8_t _defaultPointerMax = 255;
   uint8_t _defaultFactor = 0xFF;
-  uint8_t _offset = 1;
   bool _darker = true;
   bool _darkerHasChanged = false;
   bool _newMaxPointerAtMin = false;
@@ -41,6 +40,7 @@ protected:
   uint8_t _factor = 0xFF;
   uint8_t _globalFactor = 0xFF;
   uint8_t _colorFactor = 0xFF;
+  uint8_t _offset = 1;
 
 public:
   ///////////////////////

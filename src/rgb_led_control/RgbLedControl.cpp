@@ -210,6 +210,10 @@ void RgbLedControl::loop()
         case 'U':
           toggleStayAtMin();
           break;
+        case 'v':
+        case 'V':
+          setOffset(false);
+          break;
         case 'w':
         case 'W':
           writeEeprom();
@@ -256,6 +260,7 @@ void RgbLedControl::help()
   Serial.println("s: Toggles waiting at min pointer");
   Serial.println("t: Toggles staying at max pointer");
   Serial.println("u: Toggles staying at min pointer");
+  Serial.println("v: Set a new offset");
   Serial.println("w: Save the cycle time and the PROGMEM index");
   Serial.println();
 }
@@ -263,7 +268,7 @@ void RgbLedControl::help()
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax\twaitAtMin\tstayAtMax\tstayAtMin");
+  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\toffset\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax\twaitAtMin\tstayAtMax\tstayAtMin");
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
       Serial.print(led[i].getNumber());
@@ -278,6 +283,8 @@ void RgbLedControl::info()
       Serial.print("\t\t");
       Serial.print(led[i].getProgmemIndex());
       Serial.print("\t\t");
+      Serial.print(led[i].getOffset());
+      Serial.print("\t");
       Serial.print(led[i].getDarker());
       Serial.print("\t");
       Serial.print(led[i].getSpeedControlDuration());
@@ -445,6 +452,33 @@ void RgbLedControl::setIndex(bool bt)
         }
     }
 }
+
+void RgbLedControl::setOffset(bool bt)
+  {
+    uint8_t newOffset= 0;
+    byte incomingByte = ' ';
+
+    if (bt)
+    {
+      if (bluetoothCommunicator.available())
+      {
+        incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
+      }
+    }
+    else
+    {
+      incomingByte = getNumber();
+    }
+
+    if ((incomingByte >= 0) && (incomingByte < 16))
+      {
+        newOffset = incomingByte * 5;
+        for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+          {
+              led[i].setOffset(newOffset);
+          }
+      }
+  }
 
 void RgbLedControl::toggleNewFactor(void)
 {

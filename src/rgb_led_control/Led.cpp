@@ -448,7 +448,8 @@ void Led8bit::pointer2int()
     }
 
   product = (uint8_t)(255 - content) * _factor >> 8;
-  sum = 255 -  product;
+  sum = (255 -  product) * (255 - _offset) >> 8;
+  sum += _offset;
   _intensity = (uint8_t)_globalFactor * sum >> 8;
 }
 

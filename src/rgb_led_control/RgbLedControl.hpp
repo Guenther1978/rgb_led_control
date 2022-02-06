@@ -100,7 +100,7 @@ public:
    */
   void changeLoopDuration(bool);
 
-  /**@brief This methods sets the beginning of an array.
+  /**@brief This method sets the beginning of an array.
    *
    * There can be different arrays containing the intensities.
    * With this method the index of the progmem is set globally
@@ -113,6 +113,9 @@ public:
    * The global factor dims all LEDs.
    */
   void setGlobalFactor(bool);
+
+  /**@brief This method sets the offset of the brightness of a LED.*/
+  void setOffset(bool);
 
   /**@brief This method toggles if the factor changes.*/
   void toggleNewFactor(void);
