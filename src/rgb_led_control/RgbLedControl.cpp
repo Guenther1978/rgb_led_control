@@ -274,7 +274,8 @@ void RgbLedControl::help()
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax1\twaitAtMin1\twaitAtMax2\twaitAtMin2");
+  Serial.println("number\tintensity\tpointer\tFactor\tglobalFactor\tPROGMEM_index\toffset\tdarker\tduration\tcounter\tnewFactor\tnewPointer\twaitAtMax1\twaitAtMin1\twaitAtMax2\twaitAtMin2");
+
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
       Serial.print(led[i].getNumber());
