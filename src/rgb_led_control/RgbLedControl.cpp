@@ -262,18 +262,10 @@ void RgbLedControl::help()
   Serial.println("o: Set a new intensity array");
   Serial.println("p: Toggles if a new factor should be set");
   Serial.println("q: Toggles if a new pointer shoud be set");
-<<<<<<< HEAD
-  Serial.println("r: Toggles waiting at max pointer");
-  Serial.println("s: Toggles waiting at min pointer");
-  Serial.println("t: Toggles staying at max pointer");
-  Serial.println("u: Toggles staying at min pointer");
-  Serial.println("v: Set a new offset");
-=======
   Serial.println("r: Toggles waiting at max pointer 1");
   Serial.println("s: Toggles waiting at min pointer 1");
   Serial.println("t: Toggles waiting at max pointer 2");
   Serial.println("u: Toggles waiting at min pointer 2");
->>>>>>> feature_one_color_on
   Serial.println("w: Save the cycle time and the PROGMEM index");
   Serial.println();
 }
