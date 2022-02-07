@@ -47,64 +47,64 @@ void Led::setOffset(uint8_t offset)
 
 /* Waiting */
 
-bool Led::getWaitAtMax(void)
+bool Led::getWaitAtMax1(void)
   {
-    return _waitAtMax;
+    return _waitAtMax1;
   }
 
-void Led::setWaitAtMax(bool waitAtMax)
+void Led::setWaitAtMax1(bool waitAtMax)
   {
-    _waitAtMax = waitAtMax;
+    _waitAtMax1 = waitAtMax;
   }
 
-void Led::toggleWaitAtMax(void)
+void Led::toggleWaitAtMax1(void)
 {
-  _waitAtMax =! _waitAtMax;
+  _waitAtMax1 =! _waitAtMax1;
 }
 
-bool Led::getWaitAtMin(void)
+bool Led::getWaitAtMin1(void)
   {
-    return _waitAtMin;
+    return _waitAtMin1;
   }
 
-void Led::setWaitAtMin(bool waitAtMin)
+void Led::setWaitAtMin1(bool waitAtMin)
   {
-    _waitAtMin = waitAtMin;
+    _waitAtMin1 = waitAtMin;
   }
 
-void Led::toggleWaitAtMin(void)
+void Led::toggleWaitAtMin1(void)
 {
-  _waitAtMin =! _waitAtMin;
+  _waitAtMin1 =! _waitAtMin1;
 }
 
-bool Led::getStayAtMax(void)
+bool Led::getWaitAtMax2(void)
   {
-    return _stayAtMax;
+    return _waitAtMax2;
   }
 
-void Led::setStayAtMax(bool stayAtMax)
+void Led::setWaitAtMax2(bool waitAtMax)
   {
-    _stayAtMax = stayAtMax;
+    _waitAtMax2 = waitAtMax;
   }
 
-void Led::toggleStayAtMax(void)
+void Led::toggleWaitAtMax2(void)
 {
-  _stayAtMax =! _stayAtMax;
+  _waitAtMax2 =! _waitAtMax2;
 }
 
-bool Led::getStayAtMin(void)
+bool Led::getWaitAtMin2(void)
   {
-    return _stayAtMin;
+    return _waitAtMin2;
   }
 
-void Led::setStayAtMin(bool stayAtMin)
+void Led::setWaitAtMin2(bool waitAtMin)
   {
-    _stayAtMin = stayAtMin;
+    _waitAtMin2 = waitAtMin;
   }
 
-void Led::toggleStayAtMin(void)
+void Led::toggleWaitAtMin2(void)
 {
-  _stayAtMin =! _stayAtMin;
+  _waitAtMin2 =! _waitAtMin2;
 }
 
 /* progmem_index */

@@ -124,16 +124,16 @@ public:
   void toggleNewPointer(void);
 
   /**@brief This method toggles in waiting or not at the max. pointer */
-  void toggleWaitAtMax(void);
+  void toggleWaitAtMax1(void);
 
   /**@brief This method toggles in waiting or not at the min. pointer */
-  void toggleWaitAtMin(void);
+  void toggleWaitAtMin1(void);
 
   /**@brief This method toggles in staying or not at the max. pointer */
-  void toggleStayAtMax(void);
+  void toggleWaitAtMax2(void);
 
   /**@brief This method toggles in staying or not at the min. pointer */
-  void toggleStayAtMin(void);
+  void toggleWaitAtMin2(void);
 
   /**@brief This methode counts the LEDs which are getting darker */
   uint8_t countLedsGettingDarker(void);
