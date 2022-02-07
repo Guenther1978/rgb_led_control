@@ -266,6 +266,7 @@ void RgbLedControl::help()
   Serial.println("s: Toggles waiting at min pointer 1");
   Serial.println("t: Toggles waiting at max pointer 2");
   Serial.println("u: Toggles waiting at min pointer 2");
+  Serial.println("v: Set a new offset");
   Serial.println("w: Save the cycle time and the PROGMEM index");
   Serial.println();
 }
