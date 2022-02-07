@@ -25,10 +25,10 @@ private:
   bool _newMinPointerAtMax = false;
   bool _newFactorAtMax = false;
   bool _newFactorAtMin = false;
-  bool _waitAtMax = false;
-  bool _waitAtMin = false;
-  bool _stayAtMax = false;
-  bool _stayAtMin = false;
+  bool _waitAtMax1 = false;
+  bool _waitAtMin1 = false;
+  bool _waitAtMax2 = false;
+  bool _waitAtMin2 = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
   bool _pointerIsChangeable = true;
@@ -73,40 +73,40 @@ public:
   /* Waiting */
 
   /** @return waitAtMax */
-  bool getWaitAtMax(void);
+  bool getWaitAtMax1(void);
 
   /** @param waitAtMax */
-  void setWaitAtMax(bool waitAtMax);
+  void setWaitAtMax1(bool waitAtMax);
 
   /** @brief toggle waitAtMax */
-  void toggleWaitAtMax(void);
+  void toggleWaitAtMax1(void);
 
   /** @return waitAtMin */
-  bool getWaitAtMin(void);
+  bool getWaitAtMin1(void);
 
   /** @param waitAtMax */
-  void setWaitAtMin(bool waitAtMin);
+  void setWaitAtMin1(bool waitAtMin);
 
   /** @brief toggle waitAtMin */
-  void toggleWaitAtMin(void);
+  void toggleWaitAtMin1(void);
 
   /** @return waitAtMax */
-  bool getStayAtMax(void);
+  bool getWaitAtMax2(void);
 
   /** @param waitAtMax */
-  void setStayAtMax(bool waitAtMax);
+  void setWaitAtMax2(bool waitAtMax);
 
   /** @brief toggle waitAtMax */
-  void toggleStayAtMax(void);
+  void toggleWaitAtMax2(void);
 
   /** @return waitAtMin */
-  bool getStayAtMin(void);
+  bool getWaitAtMin2(void);
 
   /** @param waitAtMax */
-  void setStayAtMin(bool waitAtMin);
+  void setWaitAtMin2(bool waitAtMin);
 
   /** @brief toggle waitAtMin */
-  void toggleStayAtMin(void);
+  void toggleWaitAtMin2(void);
 
   /* pointer */
   
