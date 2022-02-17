@@ -43,8 +43,6 @@ void Led::setOffset(uint8_t offset)
   }
 
 
-
-
 /* Waiting */
 
 bool Led::getWaitAtMax1(void)
@@ -106,6 +104,7 @@ void Led::toggleWaitAtMin2(void)
 {
   _waitAtMin2 =! _waitAtMin2;
 }
+
 
 /* progmem_index */
 
@@ -200,14 +199,14 @@ void Led::setMaxPointer2Default(void)
   _pointerMin = _defaultPointerMin;
 }
 
-bool Led::getPointerIsChangeable(void)
+bool Led::getDimmable(void)
   {
-    return _pointerIsChangeable;
+    return _dimmable;
   }
 
-void Led::setPointerIsChangeable(bool pointerIsChangeable)
+void Led::setDimmable(bool dimmable)
   {
-    _pointerIsChangeable = pointerIsChangeable;
+    _dimmable = dimmable;
   }
 
 
@@ -231,6 +230,16 @@ uint8_t Led::getGlobalFactor()
 void Led::setGlobalFactor(uint8_t factor)
 {
   _globalFactor = factor;
+}
+
+uint8_t Led::getColorFactor()
+{
+  return _colorFactor;
+}
+
+void Led::setColorFactor(uint8_t factor)
+{
+  _colorFactor = factor;
 }
 
 
@@ -341,7 +350,7 @@ void Led::decreasePointer()
 
 void Led::changePointer()
 {
-  if (_pointerIsChangeable)
+  if (_dimmable)
     {
       _darkerHasChanged = false;
       if (_darker)
@@ -421,6 +430,7 @@ void Led8bit::pointer2int()
   uint8_t content;
   uint8_t product;
   uint8_t sum;
+  uint8_t factor;
 
   switch(_progmemIndex)
     {
@@ -447,10 +457,11 @@ void Led8bit::pointer2int()
       break;
     }
 
+  factor = _globalFactor * _colorFactor >> 8;
   product = (uint8_t)(255 - content) * _factor >> 8;
   sum = (255 -  product) * (255 - _offset) >> 8;
   sum += _offset;
-  _intensity = (uint8_t)_globalFactor * sum >> 8;
+  _intensity = (uint8_t)factor * sum >> 8;
 }
 
 void Led8bit::int2output(void)

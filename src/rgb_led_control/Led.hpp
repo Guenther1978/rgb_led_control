@@ -31,7 +31,7 @@ private:
   bool _waitAtMin2 = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
-  bool _pointerIsChangeable = true;
+  bool _dimmable = true;
 
 protected:
   uint8_t _number = 0;
@@ -40,7 +40,7 @@ protected:
   uint8_t _factor = 0xFF;
   uint8_t _globalFactor = 0xFF;
   uint8_t _colorFactor = 0xFF;
-  uint8_t _offset = 1;
+  uint8_t _offset = 0;
 
 public:
   ///////////////////////
@@ -121,6 +121,7 @@ public:
   /** @brief toggle waitAtMin */
   void toggleWaitAtMin2(void);
 
+
   /* pointer */
   
   /** @return pointer to the intensities */
@@ -166,10 +167,10 @@ public:
   void setMaxPointer2Default(void);
 
   /** @return changePointer */
-  bool getPointerIsChangeable(void);
+  bool getDimmable(void);
 
   /** @param changePointer */
-  void setPointerIsChangeable(bool);
+  void setDimmable(bool);
 
   
   // factors
@@ -180,11 +181,17 @@ public:
   /**@param factor*/
   void setFactor(uint8_t);
 
-  /**@return factor*/
+  /**@return globalFactor*/
   uint8_t getGlobalFactor(void);
 
-  /**@param factor*/
+  /**@param globalFactor*/
   void setGlobalFactor(uint8_t);
+
+  /**@return colorFactor*/
+  uint8_t getColorFactor(void);
+
+  /**@param colorFactor*/
+  void setColorFactor(uint8_t);
 
   /**@return factor*/
   bool getNewFactorAtMax(void);
@@ -231,7 +238,7 @@ public:
   
 
   ///////////////////////////////////////////////////////
-  // methods dealing with the pointer to thw intensities
+  // methods dealing with the pointer to the intensities
   ///////////////////////////////////////////////////////
   
   /**Increases the pointer to the intensities.

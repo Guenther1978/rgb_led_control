@@ -17,7 +17,8 @@
 #endif
 
 #define NUMBER_OF_LEDS 3
-#define NUMBER_OF_PROGMEMS 10
+#define NUMBER_OF_PROGMEMS 6
+#define NUMBER_OF_PLAYS 4
 #define DEFAULT_PROGMEM_NUMBER 0
 #define DEFAULT_GLOBAL_FACTOR 0xFF
 #define DELAY_TIME 20
@@ -38,10 +39,11 @@ private:
   #else
   Led8bit led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
   #endif
+  unsigned char playOfLight;
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;
-  bool outputOfLoopDuration;
+  bool singleLedProperty;
   byte incomingByte;
 public:
   /**@brief This function initializes the LightSnake class.
@@ -62,6 +64,12 @@ public:
    * intensities are send via the I2C bus to the PCA9685.
    */
   void loop();
+
+  /** @return playOfLight */
+  unsigned char getPlayOfLight(void);
+
+  /**@brief sets the play of light*/
+  void setPlayOfLight(bool);
 
   /**@brief This method prints an info
    *
@@ -84,6 +92,12 @@ public:
    * LED and by getting the new duration.
    */
   int8_t getNumber();  
+
+  /**@return boolean
+   *
+   * This method is used by getting a true or false.
+   */
+  bool getBoolean(void);
 
   /**@brief This method sets a new duration time for the loop.
    *
@@ -117,6 +131,9 @@ public:
   /**@brief This method sets the offset of the brightness of a LED.*/
   void setOffset(bool);
 
+  /**@brief This methods toggles if all or a single LED should be changed.*/
+  void toggleSingleLedProperty(void);
+
   /**@brief This method toggles if the factor changes.*/
   void toggleNewFactor(void);
 
@@ -137,6 +154,15 @@ public:
 
   /**@brief This methode counts the LEDs which are getting darker */
   uint8_t countLedsGettingDarker(void);
+
+  /**@brief This methode initializes the properties or the blue LED */
+  void blueLED(void);
+
+  /**@brief This methode initializes the properties or the green LED */
+  void greenLED(void);
+
+  /**@brief This methode initializes the properties or the red LED */
+  void redLED(void);
 
   /**@brief This method reads the content of the EEPROM.
    *
