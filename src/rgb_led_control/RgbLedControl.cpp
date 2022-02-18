@@ -731,11 +731,115 @@ void RgbLedControl::blueLED(void)
 
 void RgbLedControl::greenLED(void)
   {
+    uint8_t newColorFactor = 0xFF;
+    byte incomingByte = ' ';
+    bool isDimmable = false;
+
+    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        if ((led[i].getColor() == 'g') || (led[i].getColor() == 'G'))
+          {
+            Serial.println("Dimmable: ");
+            isDimmable = getBoolean();
+            if (isDimmable)
+              {
+                led[i].setDimmable(true);
+                Serial.println("Color Factor: ");
+                int8_t newColorFactor = getNumber();
+                if ((newColorFactor >= 0) && (newColorFactor <= 4))
+                  {
+                      newColorFactor = 175 + incomingByte * 20;
+                      led[i].setColorFactor(newColorFactor);
+                  }
+                Serial.println("Progmem Array: ");
+                int8_t newIndex = getNumber();
+                if ((newIndex >= 0) && (newIndex < NUMBER_OF_PROGMEMS))
+                  {
+                       led[i].setProgmemIndex(newIndex);
+                  }
+                Serial.println("New factor at Max: ");
+                led[i].setNewFactorAtMax(getBoolean());
+                Serial.println("New factor at Min: ");
+                led[i].setNewFactorAtMin(getBoolean());
+                Serial.println("New min pointer at Max: ");
+                led[i].setNewMinPointerAtMax(getBoolean());
+                Serial.println("New max pointer at Min: ");
+                led[i].setNewMaxPointerAtMin(getBoolean());
+                Serial.println("Wait At Max 1");
+                led[i].setWaitAtMax1(getBoolean());
+                Serial.println("Wait At Min 1");
+                led[i].setWaitAtMin1(getBoolean());
+                Serial.println("Wait At Max 2");
+                led[i].setWaitAtMax2(getBoolean());
+                Serial.println("Wait At Min 2");
+                led[i].setWaitAtMin2(getBoolean());
+              }
+            else
+              {
+                led[i].setDimmable(false);
+                led[i].setIntensity(getNumber() * 17);
+                Serial.print("Intensity: ");
+                Serial.println(led[i].getIntensity());
+              }
+          }
+      }
 
   }
 
 void RgbLedControl::redLED(void)
   {
+    uint8_t newColorFactor = 0xFF;
+    byte incomingByte = ' ';
+    bool isDimmable = false;
+
+    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        if ((led[i].getColor() == 'r') || (led[i].getColor() == 'R'))
+          {
+            Serial.println("Dimmable: ");
+            isDimmable = getBoolean();
+            if (isDimmable)
+              {
+                led[i].setDimmable(true);
+                Serial.println("Color Factor: ");
+                int8_t newColorFactor = getNumber();
+                if ((newColorFactor >= 0) && (newColorFactor <= 4))
+                  {
+                      newColorFactor = 175 + incomingByte * 20;
+                      led[i].setColorFactor(newColorFactor);
+                  }
+                Serial.println("Progmem Array: ");
+                int8_t newIndex = getNumber();
+                if ((newIndex >= 0) && (newIndex < NUMBER_OF_PROGMEMS))
+                  {
+                       led[i].setProgmemIndex(newIndex);
+                  }
+                Serial.println("New factor at Max: ");
+                led[i].setNewFactorAtMax(getBoolean());
+                Serial.println("New factor at Min: ");
+                led[i].setNewFactorAtMin(getBoolean());
+                Serial.println("New min pointer at Max: ");
+                led[i].setNewMinPointerAtMax(getBoolean());
+                Serial.println("New max pointer at Min: ");
+                led[i].setNewMaxPointerAtMin(getBoolean());
+                Serial.println("Wait At Max 1");
+                led[i].setWaitAtMax1(getBoolean());
+                Serial.println("Wait At Min 1");
+                led[i].setWaitAtMin1(getBoolean());
+                Serial.println("Wait At Max 2");
+                led[i].setWaitAtMax2(getBoolean());
+                Serial.println("Wait At Min 2");
+                led[i].setWaitAtMin2(getBoolean());
+              }
+            else
+              {
+                led[i].setDimmable(false);
+                led[i].setIntensity(getNumber() * 17);
+                Serial.print("Intensity: ");
+                Serial.println(led[i].getIntensity());
+              }
+          }
+      }
 
   }
 
