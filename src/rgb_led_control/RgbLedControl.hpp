@@ -44,7 +44,6 @@ private:
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;
-  bool singleLedProperty;
   byte incomingByte;
 public:
   /**@brief This function initializes the LightSnake class.
@@ -136,10 +135,19 @@ public:
   void toggleSingleLedProperty(void);
 
   /**@brief This method toggles if the factor changes.*/
-  void toggleNewFactor(void);
+  void toggleNewFactorAtMax(void);
+
+  /**@brief This method toggles if the factor changes.*/
+  void toggleNewFactorAtMin(void);
 
   /**@brief This mehtod toggles if the pointer chages.*/
-  void toggleNewPointer(void);
+  void toggleNewPointerAtMax(void);
+
+  /**@brief This mehtod toggles if the pointer chages at min. position.*/
+  void toggleNewMinPointerAtMax(void);
+
+  /**@brief This mehtod toggles if the pointer chages at max. position.*/
+  void toggleNewMaxPointerAtMin(void);
 
   /**@brief This method toggles in waiting or not at the max. pointer */
   void toggleWaitAtMax1(void);
@@ -155,6 +163,9 @@ public:
 
   /**@brief This methode counts the LEDs which are getting darker */
   uint8_t countLedsGettingDarker(void);
+
+  /**@brief Sets the colorfactors */
+  void setColorFactors(void);
 
   /**@brief This methode initializes the properties or the blue LED */
   void blueLED(void);

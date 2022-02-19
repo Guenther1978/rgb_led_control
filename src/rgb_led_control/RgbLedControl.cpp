@@ -176,7 +176,7 @@ void RgbLedControl::loop()
             break;
           case 'c':
           case 'C':
-            //setColorFactor();
+            setColorFactors();
             break;
           case 'd':
           case 'D':
@@ -184,9 +184,11 @@ void RgbLedControl::loop()
             break;
           case 'e':
           case 'E':
+            toggleNewFactorAtMax();
             break;
           case 'f':
           case 'F':
+            toggleNewFactorAtMin();
             break;
           case 'g':
           case 'G':
@@ -202,51 +204,57 @@ void RgbLedControl::loop()
             break;
           case 'j':
           case 'J':
-            setGlobalFactor(false);
+            toggleWaitAtMax1();
+            break;
+          case 'k':
+          case 'K':
+            toggleWaitAtMin1();
+            break;
+          case 'l':
+          case 'L':
+            toggleWaitAtMax2();
             break;
           case 'm':
           case 'M':
+            toggleWaitAtMin2();
             break;
           case 'n':
           case 'N':
+            toggleNewMinPointerAtMax();
             break;
           case 'o':
           case 'O':
+            setOffset(false);
             break;
           case 'p':
           case 'P':
-            toggleNewFactor();
             setIndex(false);
             break;
           case 'q':
           case 'Q':
-            toggleNewPointer();
+            toggleNewMaxPointerAtMin();
             break;
           case 'r':
           case 'R':
             redLED();
-            //toggleWaitAtMax1();
             break;
           case 's':
           case 'S':
-            toggleWaitAtMin1();
+            writeEeprom();
             break;
           case 't':
           case 'T':
             testAllLeds();
-            //toggleWaitAtMax2();
             break;
           case 'u':
           case 'U':
-            toggleWaitAtMin2();
+            setGlobalFactor(false);
             break;
           case 'v':
           case 'V':
-            setOffset(false);
             break;
           case 'w':
           case 'W':
-            writeEeprom();
             break;
           case 'x':
           case 'X':
@@ -307,73 +315,86 @@ void RgbLedControl::help()
   Serial.println();
   Serial.println("a: Play of light");
   Serial.println("b: blue LED");
-  Serial.println("c: ");
+  Serial.println("c: color factor");
   Serial.println("d: loop duration");
-  Serial.println("e: global factor");
-  Serial.println("f: new factor");
+  Serial.println("e: new factor at max");
+  Serial.println("f: new factor at min");
   Serial.println("g: green LED");
   Serial.println("h: Help");
   Serial.println("i: Info");
-  Serial.println("j: ");
-  Serial.println("k: ");
-  Serial.println("l: ");
-  Serial.println("m: ");
-  Serial.println("n: ");
+  Serial.println("j: wait at max 1");
+  Serial.println("k: wait at min 1");
+  Serial.println("l: wait at max 2");
+  Serial.println("m: wait at min");
+  Serial.println("n: new min pointer at max");
   Serial.println("o: offset");
-  Serial.println("p: progmeme index");
-  Serial.println("q: Toggles if a new pointer shoud be set");
-  Serial.println("r: red LED");//Toggles waiting at max pointer 1");
-  Serial.println("s: Toggles of one or all LEDs should be changed");//Toggles waiting at min pointer 1");
-  Serial.println("t: Test all LEDs");//Toggles waiting at max pointer 2");
-  Serial.println("u: Toggles waiting at min pointer 2");
-  Serial.println("v: Set a new offset");
-  Serial.println("w: Save the cycle time and the PROGMEM index");
-  Serial.println("x: ");
-  Serial.println("y: ");
-  Serial.println("z: Zero based indexing");
+  Serial.println("p: progmem index");
+  Serial.println("q: new max pointer at min");
+  Serial.println("r: red LED");
+  Serial.println("s: Save values to EEPROM");
+  Serial.println("t: Test all LEDs");
+  Serial.println("u: global factor");
+//  Serial.println("v: ");
+//  Serial.println("w: ");
+//  Serial.println("x: ");
+//  Serial.println("y: ");
+//  Serial.println("z: ");
   Serial.println();
 }
 
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tcolor\tintensity\tpointer\tdimmable\tFactor\
-  \tglobalFactor\tcolorFactor\toffset\tdarker\tduration\tcounter");
+  Serial.println("number\tcolor\tintensity\tpointer\tpointer_min\tpointer_max\
+\tdarker\tdimmable");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
       Serial.print(led[i].getNumber());
       Serial.print("\t");
-      Serial.print(led[i].getColor());
+      Serial.write(led[i].getColor());
       Serial.print("\t");
       Serial.print(led[i].getIntensity());
       Serial.print("\t\t");
       Serial.print(led[i].getPointer());
       Serial.print("\t");
-      Serial.print(led[i].getDimmable());
+      Serial.print(led[i].getMinPointer());
+      Serial.print("\t\t");
+      Serial.print(led[i].getMaxPointer());
+      Serial.print("\t\t");
+      Serial.print(led[i].getDarker());
+      Serial.print("\t");
+      Serial.println(led[i].getDimmable());
+    }
+
+  Serial.println();
+  Serial.println("PROGMEM_index\tfactor\tglobalFactor\tcolorFactor\
+\toffset\tduration\tcounter");
+
+  for(int i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      Serial.print(led[i].getProgmemIndex());
       Serial.print("\t\t");
       Serial.print(led[i].getFactor());
       Serial.print("\t\t");
       Serial.print(led[i].getGlobalFactor());
       Serial.print("\t\t");
       Serial.print(led[i].getColorFactor());
-      Serial.print("\t\t");
-      Serial.print(led[i].getOffset());
       Serial.print("\t");
-      Serial.print(led[i].getDarker());
+      Serial.print(led[i].getOffset());
       Serial.print("\t");
       Serial.print(led[i].getSpeedControlDuration());
       Serial.print("\t\t");
       Serial.println(led[i].getSpeedControlCounter());
     }
 
+
   Serial.println();
-  Serial.println("PROGMEM_index\tnewFactorAtMax\tnewFactorAtMin\tnewPointerAtMax\tnewPointerAtMin\twaitAtMax1\twaitAtMin1\twaitAtMax2\twaitAtMin2");
+  Serial.println("newFactorAtMax\tnewFactorAtMin\tnewPointerAtMax\
+\tnewPointerAtMin\twaitAtMax1\twaitAtMin1\twaitAtMax2\twaitAtMin2");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      Serial.print(led[i].getProgmemIndex());
-      Serial.print("\t\t");
       Serial.print(led[i].getNewFactorAtMax());
       Serial.print("\t\t");
       Serial.print(led[i].getNewFactorAtMin());
@@ -398,8 +419,6 @@ void RgbLedControl::info()
   Serial.println(cycleTime);
   Serial.print("Play of light:\t");
   Serial.println(playOfLight);
-  Serial.print("singleLedProperty");
-  Serial.println(singleLedProperty);
   Serial.println();
 }
 
@@ -560,6 +579,17 @@ void RgbLedControl::setGlobalFactor(bool bt)
     }
 }
 
+void RgbLedControl::setColorFactors()
+  {
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        Serial.print("Factor ");
+        Serial.write(led[i].getColor());
+        Serial.println(": ");
+        led[i].setColorFactor(17 * getNumber());
+      }
+  }
+
 void RgbLedControl::setIndex(bool bt)
 {
   int8_t newIndex = -1;
@@ -612,7 +642,15 @@ void RgbLedControl::setOffset(bool bt)
       }
   }
 
-void RgbLedControl::toggleNewFactor(void)
+void RgbLedControl::toggleNewFactorAtMax(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleNewFactorAtMax();
+    }
+}
+
+void RgbLedControl::toggleNewFactorAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -620,7 +658,15 @@ void RgbLedControl::toggleNewFactor(void)
     }
 }
 
-void RgbLedControl::toggleNewPointer(void)
+void RgbLedControl::toggleNewMinPointerAtMax(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].toggleNewMinPointerAtMax();
+    }
+}
+
+void RgbLedControl::toggleNewMaxPointerAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -689,19 +735,19 @@ void RgbLedControl::blueLED(void)
             if (isDimmable)
               {
                 led[i].setDimmable(true);
-                Serial.println("Color Factor (0 .. 4): ");
+                Serial.println("Color Factor (0..9, a..f): ");
                 incomingByte = getNumber();
-                if ((incomingByte >= 0) && (incomingByte <= 4))
+                if ((incomingByte >= 0) && (incomingByte < 16))
                   {
-                      led[i].setColorFactor(175 + incomingByte * 20);
+                      led[i].setColorFactor(incomingByte * 17);
                   }
-                Serial.println("Offset (0..9): ");
+                Serial.println("Offset (0..9, a..f): ");
                 incomingByte = getNumber();
                 if ((incomingByte >= 0) && (incomingByte < 16))
                   {
                     led[i].setOffset(incomingByte * 5);
                   }
-                Serial.println("Progmem Array (): ");
+                Serial.println("Progmem Array (0..5): ");
                 incomingByte = getNumber();
                 if ((incomingByte >= 0) && (incomingByte < NUMBER_OF_PROGMEMS))
                   {
@@ -750,19 +796,19 @@ void RgbLedControl::greenLED(void)
             if (isDimmable)
               {
                 led[i].setDimmable(true);
-                Serial.println("Color Factor (0 .. 4): ");
+                Serial.println("Color Factor (0..9, a..f): ");
                 incomingByte = getNumber();
-                if ((incomingByte >= 0) && (incomingByte <= 4))
+                if ((incomingByte >= 0) && (incomingByte < 16))
                   {
-                      led[i].setColorFactor(175 + incomingByte * 20);
+                      led[i].setColorFactor(incomingByte * 17);
                   }
-                Serial.println("Offset (0..9): ");
+                Serial.println("Offset (0..9, a..f): ");
                 incomingByte = getNumber();
                 if ((incomingByte >= 0) && (incomingByte < 16))
                   {
                     led[i].setOffset(incomingByte * 5);
                   }
-                Serial.println("Progmem Array (): ");
+                Serial.println("Progmem Array (0..5): ");
                 incomingByte = getNumber();
                 if ((incomingByte >= 0) && (incomingByte < NUMBER_OF_PROGMEMS))
                   {
@@ -812,13 +858,13 @@ void RgbLedControl::redLED(void)
             if (isDimmable)
               {
                 led[i].setDimmable(true);
-                Serial.println("Color Factor (0 .. 4): ");
+                Serial.println("Color Factor (0..9, a..f): ");
                 incomingByte = getNumber();
-                if ((incomingByte >= 0) && (incomingByte <= 4))
+                if ((incomingByte >= 0) && (incomingByte < 16))
                   {
-                      led[i].setColorFactor(175 + incomingByte * 20);
+                      led[i].setColorFactor(incomingByte * 17);
                   }
-                Serial.println("Offset (0..9): ");
+                Serial.println("Offset (0..9, a..f): ");
                 incomingByte = getNumber();
                 if ((incomingByte >= 0) && (incomingByte < 16))
                   {
