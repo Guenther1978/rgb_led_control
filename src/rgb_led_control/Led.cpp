@@ -58,6 +58,10 @@ void Led::setWaitAtMax1(bool waitAtMax)
 void Led::toggleWaitAtMax1(void)
 {
   _waitAtMax1 =! _waitAtMax1;
+  if (_waitAtMax1 == false)
+    {
+      _dimmable = true;
+    }
 }
 
 bool Led::getWaitAtMin1(void)
@@ -73,6 +77,10 @@ void Led::setWaitAtMin1(bool waitAtMin)
 void Led::toggleWaitAtMin1(void)
 {
   _waitAtMin1 =! _waitAtMin1;
+  if (_waitAtMin1 == false)
+    {
+      _dimmable = true;
+    }
 }
 
 bool Led::getWaitAtMax2(void)
@@ -88,6 +96,10 @@ void Led::setWaitAtMax2(bool waitAtMax)
 void Led::toggleWaitAtMax2(void)
 {
   _waitAtMax2 =! _waitAtMax2;
+  if (_waitAtMax2 == false)
+    {
+      _dimmable = true;
+    }
 }
 
 bool Led::getWaitAtMin2(void)
@@ -103,6 +115,10 @@ void Led::setWaitAtMin2(bool waitAtMin)
 void Led::toggleWaitAtMin2(void)
 {
   _waitAtMin2 =! _waitAtMin2;
+  if (_waitAtMin2 == false)
+    {
+      _dimmable = true;
+    }
 }
 
 
