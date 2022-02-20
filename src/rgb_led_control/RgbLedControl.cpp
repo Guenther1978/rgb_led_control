@@ -164,35 +164,44 @@ void RgbLedControl::loop()
   if (Serial.available())
     {
       incomingByte = Serial.read();
+      Serial.write(incomingByte);
+      Serial.println();
       switch (incomingByte)
         {
           case 'a':
           case 'A':
             setPlayOfLight(false);
+            info();
             break;
           case 'b':
           case 'B':
             blueLED();
+            info();
             break;
           case 'c':
           case 'C':
             setColorFactors();
+            info();
             break;
           case 'd':
           case 'D':
             changeLoopDuration(false);
+            info();
             break;
           case 'e':
           case 'E':
             toggleNewFactorAtMax();
+            info();
             break;
           case 'f':
           case 'F':
             toggleNewFactorAtMin();
+            info();
             break;
           case 'g':
           case 'G':
             greenLED();
+            info();
             break;
           case 'h':
           case 'H':
@@ -205,38 +214,47 @@ void RgbLedControl::loop()
           case 'j':
           case 'J':
             toggleWaitAtMax1();
+            info();
             break;
           case 'k':
           case 'K':
             toggleWaitAtMin1();
+            info();
             break;
           case 'l':
           case 'L':
             toggleWaitAtMax2();
+            info();
             break;
           case 'm':
           case 'M':
             toggleWaitAtMin2();
+            info();
             break;
           case 'n':
           case 'N':
             toggleNewMinPointerAtMax();
+            info();
             break;
           case 'o':
           case 'O':
             setOffset(false);
+            info();
             break;
           case 'p':
           case 'P':
             setIndex(false);
+            info();
             break;
           case 'q':
           case 'Q':
             toggleNewMaxPointerAtMin();
+            info();
             break;
           case 'r':
           case 'R':
             redLED();
+            info();
             break;
           case 's':
           case 'S':
@@ -249,6 +267,7 @@ void RgbLedControl::loop()
           case 'u':
           case 'U':
             setGlobalFactor(false);
+            info();
             break;
           case 'v':
           case 'V':
@@ -325,7 +344,7 @@ void RgbLedControl::help()
   Serial.println("j: wait at max 1");
   Serial.println("k: wait at min 1");
   Serial.println("l: wait at max 2");
-  Serial.println("m: wait at min");
+  Serial.println("m: wait at min 2");
   Serial.println("n: new min pointer at max");
   Serial.println("o: offset");
   Serial.println("p: progmem index");
