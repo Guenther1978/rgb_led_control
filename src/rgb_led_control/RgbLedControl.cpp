@@ -811,7 +811,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
           {
-            led[i].setNewFactorAtMax(getBoolean());
+            led[i].setNewFactorAtMax(incomingByte);
           }
         else if (incomingByte == -2)
           {
