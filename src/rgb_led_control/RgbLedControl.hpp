@@ -96,8 +96,11 @@ public:
   /**@return boolean
    *
    * This method is used by getting a true or false.
+   * The return value is an integer. 0 will be intepreted as false,
+   * 1 as true. With a negative number as a return value, the calling
+   * function will not update the boolean value, it stays true or false.
    */
-  bool getBoolean(void);
+  int8_t getBoolean(void);
 
   /**@brief This method sets a new duration time for the loop.
    *
@@ -167,14 +170,17 @@ public:
   /**@brief Sets the colorfactors */
   void setColorFactors(void);
 
-  /**@brief This methode initializes the properties or the blue LED */
+  /**@brief This method calls probertiesOfLed with index of the blue LED */
   void blueLED(void);
 
-  /**@brief This methode initializes the properties or the green LED */
+  /**@brief This method calls probertiesOfLed with index of the green LED */
   void greenLED(void);
 
-  /**@brief This methode initializes the properties or the red LED */
+  /**@brief This method calls probertiesOfLed with index of the red LED */
   void redLED(void);
+
+  /**@brief This method initilizes the properties of the LED */
+  void propertiesOfLed(uint8_t);
 
   /**@brief This method reads the content of the EEPROM.
    *
