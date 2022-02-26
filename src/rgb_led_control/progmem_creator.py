@@ -13,7 +13,7 @@ name = "const PROGMEM uint8_t intensities_8bit_" + str(0) + "[] = {";
 f.write(name)
 expo = math.pi / (2 * size)
 for index in range(size):
-    value = round(peak2peak * math.cos(index * expo) + offset)
+    value = round(peak2peak * math.sin(index * expo) + offset)
     print(index, value)
     f.write(str(value))
     f.write(", ")
@@ -24,7 +24,7 @@ name = "const PROGMEM uint8_t intensities_8bit_" + str(1) + "[] = {";
 f.write(name)
 expo = math.pi / size
 for index in range(size):
-    value = round(amplitude * math.cos(index * expo) + amplitude + offset)
+    value = round(amplitude * math.sin(index * expo - math.pi / 2) + amplitude + offset)
     print(index, value)
     f.write(str(value))
     f.write(", ")
@@ -35,7 +35,7 @@ name = "const PROGMEM uint8_t intensities_8bit_" + str(2) + "[] = {";
 f.write(name)
 expo = math.pi / (2 * size)
 for index in range(size):
-    value = round(peak2peak * (math.cos(index * expo))**2 + offset)
+    value = round(peak2peak * (math.sin(index * expo))**2 + offset)
     print(index, value)
     f.write(str(value))
     f.write(", ")
@@ -46,7 +46,7 @@ name = "const PROGMEM uint8_t intensities_8bit_" + str(3) + "[] = {";
 f.write(name)
 expo = peak2peak**(1 / (size - 1))
 for index in range(size):
-    value = round(peak2peak * expo**(- index)) + offset
+    value = round(expo**(index)) + offset
     print(index, value)
     f.write(str(value))
     f.write(", ")
@@ -55,9 +55,9 @@ f.write("};\n")
 
 name = "const PROGMEM uint8_t intensities_8bit_" + str(4) + "[] = {";
 f.write(name)
-expo = math.log(peak2peak, offset / 2)/(size - 1)
+expo = math.log(peak2peak)/(size - 1)
 for index in range(size):
-    value = round(max_value * math.exp(- index * expo))
+    value = round(1 * math.exp(index * expo))
     print(index, value)
     f.write(str(value))
     f.write(", ")
@@ -67,7 +67,7 @@ f.write("};\n")
 name = "const PROGMEM uint8_t intensities_8bit_" + str(5) + "[] = {";
 f.write(name)
 for index in range(size):
-    value = round (max_value - index * peak2peak / max_value)
+    value = round ((1 + index) * peak2peak / max_value)
     print(index, value)
     f.write(str(value))
     f.write(", ")
