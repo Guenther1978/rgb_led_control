@@ -431,7 +431,7 @@ void RgbLedControl::info()
       Serial.print(led[i].getNewFactorAtMax());
       Serial.print("\t\t");
       Serial.print(led[i].getNewMaxPointerAtMin());
-      Serial.print("\t\t");
+      Serial.print("\t\t\t");
       Serial.println(led[i].getNewMinPointerAtMax());
     }
 
