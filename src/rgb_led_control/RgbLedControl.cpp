@@ -189,7 +189,6 @@ void RgbLedControl::loop()
           case 'b':
           case 'B':
             blueLED();
-            info();
             break;
           case 'c':
           case 'C':
@@ -203,12 +202,12 @@ void RgbLedControl::loop()
             break;
           case 'e':
           case 'E':
-            toggleNewFactorAtMax();
+            toggleNewMinPointerAtMax();
             info();
             break;
           case 'f':
           case 'F':
-            toggleNewFactorAtMin();
+            toggleNewMaxPointerAtMin();
             info();
             break;
           case 'g':
@@ -226,27 +225,27 @@ void RgbLedControl::loop()
             break;
           case 'j':
           case 'J':
-            toggleWaitAtMax1();
+            toggleWaitAtMin1();
             info();
             break;
           case 'k':
           case 'K':
-            toggleWaitAtMin1();
+            toggleWaitAtMax1();
             info();
             break;
           case 'l':
           case 'L':
-            toggleWaitAtMax2();
+            toggleWaitAtMin2();
             info();
             break;
           case 'm':
           case 'M':
-            toggleWaitAtMin2();
+            toggleWaitAtMax2();
             info();
             break;
           case 'n':
           case 'N':
-            toggleNewMinPointerAtMax();
+            toggleNewFactorAtMax();
             info();
             break;
           case 'o':
@@ -261,7 +260,7 @@ void RgbLedControl::loop()
             break;
           case 'q':
           case 'Q':
-            toggleNewMaxPointerAtMin();
+            toggleNewFactorAtMin();
             info();
             break;
           case 'r':
@@ -349,8 +348,8 @@ void RgbLedControl::help()
   Serial.println("b: blue LED");
   Serial.println("c: color factor");
   Serial.println("d: loop duration");
-  Serial.println("e: new max pointer at min");
-  Serial.println("f: new min pointer at max");
+  Serial.println("e: new min pointer at max");
+  Serial.println("f: new max pointer at min");
   Serial.println("g: green LED");
   Serial.println("h: Help");
   Serial.println("i: Info");
@@ -358,10 +357,10 @@ void RgbLedControl::help()
   Serial.println("k: wait at max 1");
   Serial.println("l: wait at min 2");
   Serial.println("m: wait at max 2");
-  Serial.println("n: new min factor at max");
+  Serial.println("n: new factor at max");
   Serial.println("o: offset");
   Serial.println("p: progmem index");
-  Serial.println("q: new max factor at min");
+  Serial.println("q: new factor at min");
   Serial.println("r: red LED");
   Serial.println("s: Save values to EEPROM");
   Serial.println("t: Test all LEDs");
