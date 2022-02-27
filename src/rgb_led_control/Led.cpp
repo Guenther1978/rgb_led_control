@@ -48,7 +48,9 @@ void Led::toggleControlViaPointer(void)
     if (_controlViaPointer == false)
       {
         _newMinPointerAtMax = false;
+        setMinPointer2Default();
         _newMaxPointerAtMin = false;
+        setMaxPointer2Default();
         if (pgm_read_word_near(intensities_8bit_0) == MAX_INTENSITY)
           {
             _newFactorAtMin = true;
@@ -62,6 +64,7 @@ void Led::toggleControlViaPointer(void)
       {
         _newFactorAtMin = false;
         _newFactorAtMax = false;
+        _factor = _defaultFactor;
         _newMinPointerAtMax = true;
         _newMaxPointerAtMin = true;
       }
