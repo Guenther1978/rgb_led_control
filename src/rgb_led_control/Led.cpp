@@ -253,7 +253,7 @@ void Led::toggleNewMaxPointerAtMin(void)
 
 void Led::setMaxPointer2Default(void)
 {
-  _pointerMin = _defaultPointerMin;
+  _pointerMax = _defaultPointerMax;
 }
 
 bool Led::getDimmable(void)
