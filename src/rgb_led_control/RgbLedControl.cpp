@@ -15,10 +15,11 @@ void RgbLedControl::setup()
     led[i].setNumber(i);
     led[i].setFactor(0xFF);
     led[i].setGlobalFactor(0xFF);
+    led[i].setControlViaPointer(true);
     led[i].setNewFactorAtMin(false);
-    led[i].setNewFactorAtMax(true);
-    led[i].setNewMaxPointerAtMin(false);
-    led[i].setNewMinPointerAtMax(false);
+    led[i].setNewFactorAtMax(false);
+    led[i].setNewMaxPointerAtMin(true);
+    led[i].setNewMinPointerAtMax(true);
     led[i].setWaitAtMax1(false);
     led[i].setWaitAtMin1(false);
     led[i].setWaitAtMax2(true);
@@ -28,7 +29,7 @@ void RgbLedControl::setup()
     led[i].setPin2default();
     #endif
   }
-  w
+
   oldMillis = millis();
 
   randomSeed(analogRead(0));
@@ -283,6 +284,8 @@ void RgbLedControl::loop()
             break;
           case 'v':
           case 'V':
+            toggleControlViaPointers();
+            info();
             break;
           case 'w':
           case 'W':
@@ -365,7 +368,7 @@ void RgbLedControl::help()
   Serial.println("s: Save values to EEPROM");
   Serial.println("t: Test all LEDs");
   Serial.println("u: global factor");
-//  Serial.println("v: ");
+  Serial.println("v: control via pointers");
 //  Serial.println("w: ");
 //  Serial.println("x: ");
 //  Serial.println("y: ");
@@ -420,11 +423,13 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("newFactorAtMin\tnewFactorAtMax\tnewMaxPointerAtMin\
-\tnewMinPointerAtMax");
+  Serial.println("controlViaPointer\tnewFactorAtMin\tnewFactorAtMax\
+\tnewMaxPointerAtMin\tnewMinPointerAtMax");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
+      Serial.print(led[i].getControlViaPointer());
+      Serial.print("\t\t\t");
       Serial.print(led[i].getNewFactorAtMin());
       Serial.print("\t\t");
       Serial.print(led[i].getNewFactorAtMax());
@@ -688,6 +693,14 @@ void RgbLedControl::setOffset(bool bt)
       }
   }
 
+void RgbLedControl::toggleControlViaPointers(void)
+  {
+    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        led[i].toggleControlViaPointer();
+      }
+  }
+
 void RgbLedControl::toggleNewFactorAtMax(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
@@ -833,7 +846,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
             goto END_PROPERTY;
           }
 
-        Serial.println("New min pointer at Max (y/n): ")
+        Serial.println("New min pointer at Max (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
           {

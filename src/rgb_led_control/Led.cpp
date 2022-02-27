@@ -30,6 +30,42 @@ void Led::setColor(unsigned char color)
 }
 
 
+/* control via pointer */
+
+bool Led::getControlViaPointer(void)
+  {
+    return _controlViaPointer;
+  }
+
+void Led::setControlViaPointer(bool controlViaPointer)
+  {
+    _controlViaPointer = controlViaPointer;
+  }
+
+void Led::toggleControlViaPointer(void)
+  {
+    _controlViaPointer =! _controlViaPointer;
+    if (_controlViaPointer == false)
+      {
+        if (pgm_read_word_near(intensities_8bit_0) == MAX_INTENSITY)
+          {
+            _newFactorAtMin = true;
+          }
+        else if(pgm_read_word_near(intensities_8bit_0 + 255) == MAX_INTENSITY)
+          {
+            _newFactorAtMax = true;
+          }
+       }
+    else
+      {
+        _newFactorAtMin = false;
+        _newFactorAtMax = false;
+        _newMinPointerAtMax = true;
+        _newMaxPointerAtMin = true;
+      }
+  }
+
+
 /* offset */
 
 uint8_t Led::getOffset(void)

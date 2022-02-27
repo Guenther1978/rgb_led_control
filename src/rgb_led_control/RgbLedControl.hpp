@@ -135,7 +135,7 @@ public:
   void setOffset(bool);
 
   /**@brief This methods toggles if all or a single LED should be changed.*/
-  void toggleSingleLedProperty(void);
+  void toggleControlViaPointers(void);
 
   /**@brief This method toggles if the factor changes.*/
   void toggleNewFactorAtMax(void);

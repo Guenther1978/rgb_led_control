@@ -7,6 +7,12 @@
 #include "SpeedControl.hpp"
 #include "PwmSource.h"
 
+#ifdef PCA9685
+#define MAX_INTENSITY 4095
+#else
+#define MAX_INTENSITY 255
+#endif
+
 const uint8_t pwmPins[] = {3, 5, 6, 9, 10, 11};
 
 class Led
@@ -14,6 +20,7 @@ class Led
 private:
   SpeedControl speedControl;
   unsigned char _color = ' ';
+  bool _controlViaPointer = true;
   uint8_t _pointerMin = 0;
   uint8_t _pointerMax = 255;
   uint8_t _defaultPointerMin = 0;
@@ -65,9 +72,21 @@ public:
   void setColor(unsigned char);
 
 
+  /* control via pointer or factors */
+
+  /** @return if controlled via pointer or not */
+  bool getControlViaPointer(void);
+
+  /** @param controlViaPointer */
+  void setControlViaPointer(bool);
+
+  /** @brief toggle controlViaPointer */
+  void toggleControlViaPointer(void);
+
+
   /* offset */
 
-  /** @retuen the offset of this LED */
+  /** @return the offset of this LED */
   uint8_t getOffset(void);
 
   /** @param offset of this LED */
