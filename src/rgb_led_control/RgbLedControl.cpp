@@ -28,7 +28,7 @@ void RgbLedControl::setup()
     led[i].setPin2default();
     #endif
   }
-
+  w
   oldMillis = millis();
 
   randomSeed(analogRead(0));
@@ -777,6 +777,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
     if (isDimmable)
       {
         led[i].setDimmable(true);
+
         Serial.println("Color Factor (0..9, a..f): ");
         incomingByte = getNumber();
         if ((incomingByte >= 0) && (incomingByte < 16))
@@ -787,6 +788,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Offset (0..9, a..f): ");
         incomingByte = getNumber();
         if ((incomingByte >= 0) && (incomingByte < 16))
@@ -797,6 +799,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Progmem Array (0..5): ");
         incomingByte = getNumber();
         if ((incomingByte >= 0) && (incomingByte < NUMBER_OF_PROGMEMS))
@@ -807,6 +810,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("New factor at Max (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -817,6 +821,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("New factor at Min (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -827,7 +832,8 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
-        led[i].setNewFactorAtMin(getBoolean());
+
+        Serial.println("New min pointer at Max (y/n): ")
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
           {
@@ -837,6 +843,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("New max pointer at Min (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -847,6 +854,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Wait At Min 1 (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -857,6 +865,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Wait At Max 1 (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -867,6 +876,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Wait At Min 2 (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
@@ -877,6 +887,7 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
           {
             goto END_PROPERTY;
           }
+
         Serial.println("Wait At Max 2 (y/n): ");
         incomingByte = getBoolean();
         if ((incomingByte == 0) ||(incomingByte == 1))
