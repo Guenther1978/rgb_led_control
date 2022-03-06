@@ -1,6 +1,6 @@
 #include "RgbLedControl.hpp"
 
-SoftwareSerial bluetoothCommunicator(2, 3);
+//SoftwareSerial bluetoothCommunicator(2, 3);
   
 void RgbLedControl::setup()
 {
@@ -9,6 +9,9 @@ void RgbLedControl::setup()
   led[0].setColor('r');
   led[1].setColor('g');
   led[2].setColor('b');
+
+  readEeprom();
+  readEeprom(playOfLight);
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
   {
@@ -30,13 +33,15 @@ void RgbLedControl::setup()
     #endif
   }
 
+
+
   oldMillis = millis();
 
   randomSeed(analogRead(0));
 
   readEeprom();
   
-  bluetoothCommunicator.begin(9600);
+//  bluetoothCommunicator.begin(9600);
 
   #ifdef PCA9685
   pwm.begin();
@@ -271,7 +276,7 @@ void RgbLedControl::loop()
             break;
           case 's':
           case 'S':
-            writeEeprom();
+            toggleControlViaPointers();
             break;
           case 't':
           case 'T':
@@ -284,11 +289,13 @@ void RgbLedControl::loop()
             break;
           case 'v':
           case 'V':
-            toggleControlViaPointers();
+            writeEeprom();
             info();
             break;
           case 'w':
           case 'W':
+            writeEeprom(playOfLight);
+            info();
             break;
           case 'x':
           case 'X':
@@ -303,27 +310,27 @@ void RgbLedControl::loop()
             break;
         }
     }
-    if (bluetoothCommunicator.available())
-    {
-      incomingByte = bluetoothCommunicator.read();
-      switch (incomingByte)
-        {
-        case 'd':
-        case 'D':
-          changeLoopDuration(true);
-          break;
-        case 'e':
-        case 'E':
-          setGlobalFactor(true);
-          break;
-        case 'a':
-        case 'A':
-          setPlayOfLight(true);
-          break;
-        default:
-          break;
-        }
-    }
+//    if (bluetoothCommunicator.available())
+//    {
+//      incomingByte = bluetoothCommunicator.read();
+//      switch (incomingByte)
+//        {
+//        case 'd':
+//        case 'D':
+//          changeLoopDuration(true);
+//          break;
+//        case 'e':
+//        case 'E':
+//          setGlobalFactor(true);
+//          break;
+//        case 'a':
+//        case 'A':
+//          setPlayOfLight(true);
+//          break;
+//        default:
+//          break;
+//        }
+//    }
 }
 
 unsigned char RgbLedControl::getPlayOfLight(void)
@@ -334,14 +341,15 @@ unsigned char RgbLedControl::getPlayOfLight(void)
 void RgbLedControl::setPlayOfLight(bool bt)
   {
     byte incomingByte = 0;
-    if (!bt)
-      {
+//    if (!bt)
+//      {
         incomingByte = (byte)getNumber();
         if (incomingByte < NUMBER_OF_PLAYS)
           {
             playOfLight = incomingByte;
           }
-      }
+//      }
+    readEeprom(playOfLight);
   }
 
 void RgbLedControl::help()
@@ -365,11 +373,11 @@ void RgbLedControl::help()
   Serial.println("p: progmem index");
   Serial.println("q: new factor at min");
   Serial.println("r: red LED");
-  Serial.println("s: Save values to EEPROM");
+  Serial.println("s: control via pointers");
   Serial.println("t: Test all LEDs");
   Serial.println("u: global factor");
-  Serial.println("v: control via pointers");
-//  Serial.println("w: ");
+  Serial.println("v: Start with current play of light");
+  Serial.println("w: Save current properties");
 //  Serial.println("x: ");
 //  Serial.println("y: ");
 //  Serial.println("z: ");
@@ -585,10 +593,10 @@ void RgbLedControl::changeLoopDuration(bool bt)
   
   if (bt)
   {
-    if (bluetoothCommunicator.available())
-    {
-      incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
-    }
+ //   if (bluetoothCommunicator.available())
+ //   {
+ //     incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
+ //   }
   }
   else
   {
@@ -609,10 +617,10 @@ void RgbLedControl::setGlobalFactor(bool bt)
 
   if (bt)
   {
-    if (bluetoothCommunicator.available())
-    {
-      incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET; 
-    }
+//    if (bluetoothCommunicator.available())
+//    {
+//      incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
+//    }
   }
   else
   {
@@ -647,10 +655,10 @@ void RgbLedControl::setIndex(bool bt)
 
   if (bt)
   {
-    if (bluetoothCommunicator.available())
-    {
-      newIndex = bluetoothCommunicator.read() - ASCII_OFFSET;
-    }
+//    if (bluetoothCommunicator.available())
+//    {
+//      newIndex = bluetoothCommunicator.read() - ASCII_OFFSET;
+//    }
   }
   else
   {
@@ -673,10 +681,10 @@ void RgbLedControl::setOffset(bool bt)
 
     if (bt)
     {
-      if (bluetoothCommunicator.available())
-      {
-        incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
-      }
+//      if (bluetoothCommunicator.available())
+//      {
+//        incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
+//      }
     }
     else
     {
@@ -958,44 +966,295 @@ void RgbLedControl::redLED(void)
   }
 
 void RgbLedControl::readEeprom(void)
+  {
+    playOfLight = EEPROM.read(ADDRESS_NUMBER_OF_PLAY);
+    if (playOfLight > MAX_NUMBER_OF_PLAYS)
+      {
+        playOfLight = DEFAULT_PLAY_OF_LIGHT;
+      }
+  }
+
+void RgbLedControl::readEeprom(uint8_t play)
 {
-  uint8_t index;
   uint8_t global_factor;
-  
-  cycleTime = EEPROM.read(ADDRESS_LOOP_TIME);
-  if (cycleTime == 0xFF)
+  uint8_t content;
+  uint8_t address = 1 + play * LENGTH_OF_PLAY_PROPERTIES;
+
+  Serial.println("Reading LED proberties from EEPROM...");
+  loopDuration = (unsigned long)EEPROM.read(address + OFFSET_LOOP_DURATION);
+  if ((loopDuration == 0xFF) || (loopDuration == 0))
     {
-      cycleTime = DELAY_TIME;
+      loopDuration = (unsigned long)DELAY_TIME;
     }
-  
-  global_factor = EEPROM.read(ADDRESS_GLOBAL_FACTOR);
+  Serial.print("Loop Duration: ");
+  Serial.println(loopDuration);
+  address ++;
+
+  global_factor = EEPROM.read(address + OFFSET_GLOBAL_FACTOR);
   if ((global_factor == 0xFF)||(global_factor == 0x00))
     {
       global_factor = DEFAULT_GLOBAL_FACTOR;
     }
-  
-  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
       led[i].setGlobalFactor(global_factor);
     }
-  
-  index = EEPROM.read(ADDRESS_PROGMEM_INDEX);
-  if (index == 0xFF)
-    {
-      index = DEFAULT_PROGMEM_NUMBER;
-    }
-  
+  Serial.print("Global Factor: ");
+  Serial.println(global_factor);
+  address ++;
+
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setProgmemIndex(index);
+      if ((led[i].getColor() == 'R') || (led[i].getColor() == 'r'))
+        {
+          address = OFFSET_RED;
+          Serial.println("Red LED:");
+        }
+      if ((led[i].getColor() == 'G') || (led[i].getColor() == 'g'))
+        {
+          address = OFFSET_GREEN;
+          Serial.println("Green LED:");
+        }
+      if ((led[i].getColor() == 'B') || (led[i].getColor() == 'b'))
+        {
+          address = OFFSET_BLUE;
+          Serial.println("Blue LED:");
+        }
+
+      content = EEPROM.read(address);
+      led[i].setColorFactor(content);
+      Serial.print("Color Factor: ");
+      Serial.println(content);
+      address ++;
+
+      content = EEPROM.read(address);
+      led[i].setOffset(content);
+      Serial.print("Offset: ");
+      Serial.println(content);
+      address ++;
+
+      content = EEPROM.read(address);
+      if (content == 0xFF)
+        {
+          led[i].setMinPointer(0);
+        }
+      else
+        {
+          led[i].setMinPointer(content);
+        }
+      Serial.print("Min. Pointer: ");
+      Serial.println(content);
+      address ++;
+
+      content = EEPROM.read(address);
+      led[i].setMaxPointer(content);
+      Serial.print("Max. Pointer: ");
+      Serial.println(content);
+      address ++;
+
+      content = EEPROM.read(address);
+      if (content & NEW_FACTOR_AT_MIN)
+        {
+          led[i].setNewFactorAtMin(true);
+        }
+      else
+        {
+          led[i].setNewFactorAtMin(false);
+        }
+      if (content & NEW_FACTOR_AT_MAX)
+        {
+          led[i].setNewFactorAtMax(true);
+        }
+      else
+        {
+          led[i].setNewFactorAtMax(false);
+        }
+      if(content & NEW_MIN_POINTER_AT_MAX)
+        {
+          led[i].setNewMinPointerAtMax(true);
+        }
+      else
+        {
+          led[i].setNewMinPointerAtMax(false);
+        }
+      if (content & NEW_MAX_POINTER_AT_MIN)
+        {
+          led[i].setNewMaxPointerAtMin(true);
+        }
+      else
+        {
+          led[i].setNewMaxPointerAtMin(false);
+        }
+      if (content & WAIT_AT_MIN1)
+        {
+          led[i].setWaitAtMin1(true);
+        }
+      else
+        {
+          led[i].setWaitAtMin1(false);
+        }
+      if (content & WAIT_AT_MAX1)
+        {
+          led[i].setWaitAtMax1(true);
+        }
+      else
+        {
+          led[i].setWaitAtMax1(false);
+        }
+      if (content & WAIT_AT_MIN2)
+        {
+          led[i].setWaitAtMin2(true);
+        }
+      else
+        {
+          led[i].setWaitAtMin2(false);
+        }
+      if (content & WAIT_AT_MAX2)
+        {
+          led[i].setWaitAtMax2(true);
+        }
+      else
+        {
+          led[i].setWaitAtMax2(false);
+        }
+      address ++;
+      Serial.print("New factor, pointers and waits: ");
+      Serial.println(content);
+      address ++;
+
+      content = EEPROM.read(address);
+      if (content & DIMMABLE)
+        {
+          led[i].setDimmable(true);
+        }
+      else
+        {
+          led[i].setDimmable(false);
+        }
+      led[i].setProgmemIndex(content & 0x0F);
+      Serial.print("Dimmable and index: ");
+      Serial.println(content);
+      Serial.println();
     }
 }
 
-void RgbLedControl::writeEeprom()
+void RgbLedControl::writeEeprom(void)
 {
-  EEPROM.write(ADDRESS_LOOP_TIME, cycleTime);
-  EEPROM.write(ADDRESS_GLOBAL_FACTOR, led[0].getGlobalFactor());
-  EEPROM.write(ADDRESS_PROGMEM_INDEX, led[0].getProgmemIndex());
+  EEPROM.write(ADDRESS_NUMBER_OF_PLAY, playOfLight);
+}
+
+void RgbLedControl::writeEeprom(uint8_t play)
+{
+  uint8_t cycleTime;
+  uint8_t global_factor;
+  uint8_t content;
+  uint8_t address = 1 + play * LENGTH_OF_PLAY_PROPERTIES;
+
+  Serial.print("Saving LED properties for Play of Light: ");
+  Serial.println(play);
+  Serial.println();
+
+  EEPROM.write(address + OFFSET_LOOP_DURATION, (uint8_t)loopDuration);
+  Serial.print("Loop duration: ");
+  Serial.println(loopDuration);
+  address ++;
+
+  content = led[0].getGlobalFactor();
+  EEPROM.write(address, content);
+  Serial.print("Global factor: ");
+  Serial.println(content);
+  address ++;
+
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      if ((led[i].getColor() == 'R') || (led[i].getColor() == 'r'))
+        {
+          address = OFFSET_RED;
+          Serial.println("Update red LED: ");
+        }
+      if ((led[i].getColor() == 'G') || (led[i].getColor() == 'g'))
+        {
+          address = OFFSET_GREEN;
+          Serial.println("Update green LED: ");
+        }
+      if ((led[i].getColor() == 'B') || (led[i].getColor() == 'b'))
+        {
+          address = OFFSET_BLUE;
+          Serial.println("Update blue LED: ");
+        }
+
+      content = led[i].getColorFactor();
+      EEPROM.write(address, content);
+      Serial.print("Color Factor: ");
+      Serial.println(content);
+      address ++;
+
+      content = led[i].getOffset();
+      EEPROM.write(address, content);
+      Serial.print("Offset: ");
+      Serial.println(content);
+      address ++;
+
+      content = led[i].getMinPointer();
+      EEPROM.write(address, content);
+      Serial.print("Min. Pointer: ");
+      Serial.println(content);
+      address ++;
+
+      content = led[i].getMaxPointer();
+      EEPROM.write(address, content);
+      Serial.print("Max. Pointer: ");
+      Serial.println(content);
+      address ++;
+
+      content = 0;
+      if (led[i].getNewFactorAtMin())
+        {
+          content = content | NEW_FACTOR_AT_MIN;
+        }
+      if (led[i].getNewFactorAtMax())
+        {
+          content = content | NEW_FACTOR_AT_MAX;
+        }
+      if(led[i].getNewMinPointerAtMax())
+        {
+          content = content | NEW_MIN_POINTER_AT_MAX;
+        }
+      if (led[i].getNewMaxPointerAtMin())
+        {
+          content = content | NEW_MAX_POINTER_AT_MIN;
+        }
+      if (led[i].getWaitAtMin1())
+        {
+          content = content | WAIT_AT_MIN1;
+        }
+      if (led[i].getWaitAtMax1())
+        {
+          content = content | WAIT_AT_MAX1;
+        }
+      if (led[i].getWaitAtMin2())
+        {
+          content = content | WAIT_AT_MIN2;
+        }
+      if (led[i].getWaitAtMax2())
+        {
+          content = content | WAIT_AT_MAX2;
+        }
+      EEPROM.write(address, content);
+      Serial.print("New factor, pointers and waits: ");
+      Serial.println(content);
+      address ++;
+
+      content = led[i].getProgmemIndex();
+      if (led[i].getDimmable())
+        {
+          content = content | DIMMABLE;
+        }
+      EEPROM.write(address, content);
+      Serial.print("Dimmable and index: ");
+      Serial.println(content);
+      Serial.println();
+    }
 }
 
 void RgbLedControl::testAllLeds(void)

@@ -16,20 +16,40 @@
 #include <Adafruit_PWMServoDriver.h>
 #endif
 
+/* Constants for EEPROM  */
+#define ADDRESS_NUMBER_OF_PLAY 0
+#define MAX_NUMBER_OF_PLAYS 5
+#define LENGTH_OF_LED_PROPERTIES 6
+#define LENGTH_OF_PLAY_PROPERTIES 3 * LENGTH_OF_LED_PROPERTIES + 2
+#define NEW_FACTOR_AT_MIN 0x01
+#define NEW_FACTOR_AT_MAX 0x02
+#define NEW_MIN_POINTER_AT_MAX 0x04
+#define NEW_MAX_POINTER_AT_MIN 0x08
+#define WAIT_AT_MIN1 0x10
+#define WAIT_AT_MAX1 0x20
+#define WAIT_AT_MIN2 0x40
+#define WAIT_AT_MAX2 0x80
+#define DIMMABLE 0x80
+#define OFFSET_RED 2
+#define OFFSET_GREEN OFFSET_RED + LENGTH_OF_LED_PROPERTIES
+#define OFFSET_BLUE OFFSET_GREEN + LENGTH_OF_LED_PROPERTIES
+#define OFFSET_LOOP_DURATION 0
+#define OFFSET_GLOBAL_FACTOR 1
+#define OFFSET_COLOR_PROGMEM_INDEX 1
+
+/* Constants */
 #define NUMBER_OF_LEDS 3
 #define NUMBER_OF_PROGMEMS 6
 #define LINEAR 5
 #define NUMBER_OF_PLAYS 4
 #define DEFAULT_PROGMEM_NUMBER 0
+#define DEFAULT_PLAY_OF_LIGHT 0
 #define DEFAULT_GLOBAL_FACTOR 0xFF
 #define DELAY_TIME 20
 #define DURATION_MAX 3
 #define FULL_INTENSITY 255
 #define DELAY_TEST 1000
 #define ASCII_OFFSET 48
-#define ADDRESS_LOOP_TIME 0
-#define ADDRESS_PROGMEM_INDEX 1
-#define ADDRESS_GLOBAL_FACTOR 2
 
 class RgbLedControl
 {
@@ -41,6 +61,7 @@ private:
   Led8bit led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
   #endif
   unsigned char playOfLight;
+  unsigned char numberOfPlays;
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;
@@ -182,23 +203,25 @@ public:
   /**@brief This method initilizes the properties of the LED */
   void propertiesOfLed(uint8_t);
 
-  /**@brief This method reads the content of the EEPROM.
+  /**@brief Reads the play of light at start from the EEPROM. */
+  void readEeprom(void);
+
+  /**@param playOfLight
    *
-   * The user can set the cycle time and the index of the
-   * used PROGMEM. The setup function can read the stored
-   * values. If a 255 is read, than the EEPROM has not been
-   * programmed yet. Than the cycle time and the index are
-   * set to default values.
+   * The properties of the LEDs are set regarding to the
+   * playOfLight number.
    */
-  void readEeprom();
+  void readEeprom(uint8_t);
+
+  /**@brief Writes the new playOfLight for the start to the EEPROM */
+  void writeEeprom(void);
 
   /**@brief This methods writes the current values to the EEPROM.
    *
-   * If the user changed the loop time and the PROGMEM index,
-   * he can save this to the EEPROM. So they will be loaded at
-   * the next start.
+   * If the changes of the properties of the LEDs should be saved,
+   * than this mehtod should be called with the
    */
-  void writeEeprom(void);
+  void writeEeprom(uint8_t);
 
   /**@brief This method test all LEDs
    *
