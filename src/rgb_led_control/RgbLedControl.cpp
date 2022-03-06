@@ -95,11 +95,11 @@ void RgbLedControl::loop()
               {
                 if (countLedsGettingDarker() == NUMBER_OF_LEDS)
                   {
-                    led[i].setDimmable(false);
+                    led[i].setPointerIsChangeable(false);
                   }
                 else
                   {
-                    led[i].setDimmable(true);
+                    led[i].setPointerIsChangeable(true);
                   }
               }
             if (led[i].getWaitAtMax2())
@@ -110,13 +110,13 @@ void RgbLedControl::loop()
                       {
                         if (j == i)
                           {
-                            led[j].setDimmable(false);
+                            led[j].setPointerIsChangeable(false);
                           }
                         else
                           {
                             if (!(led[j].getPointerIsAtMin()))
                               {
-                                led[j].setDimmable(true);
+                                led[j].setPointerIsChangeable(true);
                               }
                           }
                       }
@@ -141,11 +141,11 @@ void RgbLedControl::loop()
               {
                 if (countLedsGettingDarker() == 0)
                   {
-                    led[i].setDimmable(false);
+                    led[i].setPointerIsChangeable(false);
                   }
                 else
                   {
-                    led[i].setDimmable(true);
+                    led[i].setPointerIsChangeable(true);
                   }
               }
             if (led[i].getWaitAtMin2())
@@ -156,13 +156,13 @@ void RgbLedControl::loop()
                       {
                         if (j == i)
                           {
-                            led[j].setDimmable(false);
+                            led[j].setPointerIsChangeable(false);
                           }
                         else
                           {
                             if (!(led[j].getPointerIsAtMax()))
                               {
-                                led[j].setDimmable(true);
+                                led[j].setPointerIsChangeable(true);
                               }
                           }
                       }
@@ -276,7 +276,7 @@ void RgbLedControl::loop()
             break;
           case 's':
           case 'S':
-            toggleControlViaPointers();
+            writeEeprom(playOfLight);
             break;
           case 't':
           case 'T':
@@ -373,7 +373,7 @@ void RgbLedControl::help()
   Serial.println("p: progmem index");
   Serial.println("q: new factor at min");
   Serial.println("r: red LED");
-  Serial.println("s: control via pointers");
+  Serial.println("s: Save current Porperties");
   Serial.println("t: Test all LEDs");
   Serial.println("u: global factor");
   Serial.println("v: Start with current play of light");
@@ -431,13 +431,11 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("controlViaPointer\tnewFactorAtMin\tnewFactorAtMax\
+  Serial.println("newFactorAtMin\tnewFactorAtMax\
 \tnewMaxPointerAtMin\tnewMinPointerAtMax");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      Serial.print(led[i].getControlViaPointer());
-      Serial.print("\t\t\t");
       Serial.print(led[i].getNewFactorAtMin());
       Serial.print("\t\t");
       Serial.print(led[i].getNewFactorAtMax());
@@ -448,7 +446,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("waitAtMin1\twaitAtMax1\twaitAtMin2\twaitAtMax2");
+  Serial.println("waitAtMin1\twaitAtMax1\twaitAtMin2\twaitAtMax2\tpointerIsChangeable");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -458,7 +456,9 @@ void RgbLedControl::info()
       Serial.print("\t\t");
       Serial.print(led[i].getWaitAtMin2());
       Serial.print("\t\t");
-      Serial.println(led[i].getWaitAtMax2());
+      Serial.print(led[i].getWaitAtMax2());
+      Serial.print("\t\t");
+      Serial.println(led[i].getPointerIsChangeable());
    }
 
   Serial.println();
@@ -698,14 +698,6 @@ void RgbLedControl::setOffset(bool bt)
           {
               led[i].setOffset(newOffset);
           }
-      }
-  }
-
-void RgbLedControl::toggleControlViaPointers(void)
-  {
-    for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
-      {
-        led[i].toggleControlViaPointer();
       }
   }
 

@@ -38,7 +38,8 @@ private:
   bool _waitAtMin2 = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
-  bool _dimmable = true;
+    bool _pointerIsChangeable = true;
+    bool _dimmable = true;
 
 protected:
   uint8_t _number = 0;
@@ -184,6 +185,12 @@ public:
 
   /** @brief sets the maximum Pointer to the default value */
   void setMaxPointer2Default(void);
+
+  /** @return pointerIsChangeable */
+  bool getPointerIsChangeable(void);
+
+  /** @param pointerIsChangeable */
+  void setPointerIsChangeable(bool);
 
   /** @return changePointer */
   bool getDimmable(void);

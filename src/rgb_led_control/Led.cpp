@@ -256,6 +256,16 @@ void Led::setMaxPointer2Default(void)
   _pointerMax = _defaultPointerMax;
 }
 
+bool Led::getPointerIsChangeable(void)
+  {
+    return _pointerIsChangeable;
+  }
+
+void Led::setPointerIsChangeable(bool pointerIsChangeable)
+  {
+    _pointerIsChangeable = pointerIsChangeable;
+  }
+
 bool Led::getDimmable(void)
   {
     return _dimmable;
@@ -407,7 +417,7 @@ void Led::decreasePointer()
 
 void Led::changePointer()
 {
-  if (_dimmable)
+  if (_dimmable && _pointerIsChangeable)
     {
       _darkerHasChanged = false;
       if (_darker)

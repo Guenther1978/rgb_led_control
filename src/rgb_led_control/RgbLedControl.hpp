@@ -155,9 +155,6 @@ public:
   /**@brief This method sets the offset of the brightness of a LED.*/
   void setOffset(bool);
 
-  /**@brief This methods toggles if all or a single LED should be changed.*/
-  void toggleControlViaPointers(void);
-
   /**@brief This method toggles if the factor changes.*/
   void toggleNewFactorAtMax(void);
 
