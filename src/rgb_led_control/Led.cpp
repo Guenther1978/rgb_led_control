@@ -101,7 +101,7 @@ void Led::toggleWaitAtMax1(void)
   _waitAtMax1 =! _waitAtMax1;
   if (_waitAtMax1 == false)
     {
-      _dimmable = true;
+      _pointerIsChangeable = true;
     }
 }
 
@@ -120,7 +120,7 @@ void Led::toggleWaitAtMin1(void)
   _waitAtMin1 =! _waitAtMin1;
   if (_waitAtMin1 == false)
     {
-      _dimmable = true;
+      _pointerIsChangeable = true;
     }
 }
 
@@ -139,7 +139,7 @@ void Led::toggleWaitAtMax2(void)
   _waitAtMax2 =! _waitAtMax2;
   if (_waitAtMax2 == false)
     {
-      _dimmable = true;
+      _pointerIsChangeable = true;
     }
 }
 
@@ -158,7 +158,7 @@ void Led::toggleWaitAtMin2(void)
   _waitAtMin2 =! _waitAtMin2;
   if (_waitAtMin2 == false)
     {
-      _dimmable = true;
+      _pointerIsChangeable = true;
     }
 }
 
