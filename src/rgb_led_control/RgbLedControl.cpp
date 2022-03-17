@@ -959,7 +959,7 @@ void RgbLedControl::redLED(void)
 
 void RgbLedControl::readEeprom(void)
   {
-    playOfLight = EEPROM.read(ADDRESS_NUMBER_OF_PLAY);
+    playOfLight = EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
     if (playOfLight > MAX_NUMBER_OF_PLAYS)
       {
         playOfLight = DEFAULT_PLAY_OF_LIGHT;
@@ -970,8 +970,16 @@ void RgbLedControl::readEeprom(uint8_t play)
 {
   uint8_t globalFactor;
   uint8_t content;
-  uint8_t addressStart = 1 + play * LENGTH_OF_PLAY_PROPERTIES;
+  uint8_t addressStart = BYTES_NUMBER_DEFAULT_PLAY + play * (LENGTH_OF_PLAY_PROPERTIES);
   uint8_t address = addressStart;
+
+  Serial.println(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
+  Serial.print(F("Number of default play: "));
+  Serial.println(EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY));
+  Serial.println();
+
+  Serial.print(F("Start address: "));
+  Serial.println(addressStart);
 
   Serial.println(F("Reading LED proberties from the EEPROM..."));
   Serial.println(address);
@@ -1106,6 +1114,7 @@ void RgbLedControl::readEeprom(uint8_t play)
       Serial.print(F("Wait at max 1: "));
       Serial.println(content);
       Serial.println();
+      address ++;
 
       Serial.println(address);
       content = EEPROM.read(address);
@@ -1127,7 +1136,7 @@ void RgbLedControl::readEeprom(uint8_t play)
 
 void RgbLedControl::writeEeprom(void)
 {
-  EEPROM.write(ADDRESS_NUMBER_OF_PLAY, playOfLight);
+  EEPROM.write(ADDRESS_NUMBER_OF_DEFAULT_PLAY, playOfLight);
 }
 
 void RgbLedControl::writeEeprom(uint8_t play)
@@ -1135,7 +1144,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
   uint8_t cycleTime;
   uint8_t global_factor;
   uint8_t content;
-  uint8_t addressStart = 1 + play * LENGTH_OF_PLAY_PROPERTIES;
+  uint8_t addressStart = 1 + play * (LENGTH_OF_PLAY_PROPERTIES);
   uint8_t address = addressStart;
 
   Serial.print(F("Saving LED properties for Play of Light: "));
@@ -1191,12 +1200,14 @@ void RgbLedControl::writeEeprom(uint8_t play)
       EEPROM.write(address, content);
       Serial.print(F("Progmem Index"));
       Serial.println(content);
+      address ++;
 
       Serial.println(address);
       content = (uint8_t)led[i].getDimmable();
       EEPROM.write(address, content);
       Serial.print("Dimmable: ");
       Serial.println(content);
+      address ++;
 
       Serial.println(address);
       content = led[i].getMinPointer();
