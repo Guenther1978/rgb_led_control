@@ -353,6 +353,7 @@ void RgbLedControl::setPlayOfLight(bool bt)
     for (int i = 0; i < NUMBER_OF_LEDS; i ++)
       {
         led[i].setPointerIsChangeable(true);
+        led[i].setFactor(0xFF);
       }
     readEeprom(playOfLight);
   }
@@ -415,7 +416,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("PROGMEM_index\tfactor\tglobalFactor\tcolorFactor\
+  Serial.println("PROGMEM_index\tdimFactor\tglobalFactor\tcolorFactor\
 \toffset\tduration\tcounter");
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
