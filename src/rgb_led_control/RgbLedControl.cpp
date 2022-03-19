@@ -983,13 +983,13 @@ void RgbLedControl::readEeprom(uint8_t play)
 
   Serial.println(F("Reading LED proberties from the EEPROM..."));
   Serial.println(address);
-  loopDuration = (unsigned long)EEPROM.read(address + OFFSET_LOOP_DURATION);
-  if ((loopDuration == 0xFF) || (loopDuration == 0))
+  cycleTime = (unsigned long)EEPROM.read(address + OFFSET_LOOP_DURATION);
+  if ((cycleTime == 0xFF) || (cycleTime == 0))
     {
-      loopDuration = (unsigned long)DELAY_TIME;
+      cycleTime = (unsigned long)DELAY_TIME;
     }
-  Serial.print(F("Loop Duration: "));
-  Serial.println(loopDuration);
+  Serial.print(F("Time per cycle"));
+  Serial.println(cycleTime);
   address ++;
 
   globalFactor = EEPROM.read(address + OFFSET_GLOBAL_FACTOR);
@@ -1152,9 +1152,9 @@ void RgbLedControl::writeEeprom(uint8_t play)
   Serial.println();
 
   Serial.println(address);
-  EEPROM.write(address + OFFSET_LOOP_DURATION, (uint8_t)loopDuration);
-  Serial.print(F("Loop duration: "));
-  Serial.println(loopDuration);
+  EEPROM.write(address + OFFSET_LOOP_DURATION, (uint8_t)cycleTime);
+  Serial.print(F("Time per cycle"));
+  Serial.println(cycleTime);
   address ++;
 
   content = led[0].getGlobalFactor();
