@@ -341,14 +341,19 @@ unsigned char RgbLedControl::getPlayOfLight(void)
 void RgbLedControl::setPlayOfLight(bool bt)
   {
     byte incomingByte = 0;
-//    if (!bt)
-//      {
+    if (!bt)
+      {
         incomingByte = (byte)getNumber();
         if (incomingByte < NUMBER_OF_PLAYS)
           {
             playOfLight = incomingByte;
           }
-//      }
+      }
+
+    for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+      {
+        led[i].setPointerIsChangeable(true);
+      }
     readEeprom(playOfLight);
   }
 
