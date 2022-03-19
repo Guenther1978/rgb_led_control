@@ -10,37 +10,16 @@ void RgbLedControl::setup()
   led[1].setColor('g');
   led[2].setColor('b');
 
+  // read current default play of light
   readEeprom();
+
+  // read led properties for default play of light
   readEeprom(playOfLight);
-
-  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
-  {
-    led[i].setNumber(i);
-    led[i].setFactor(0xFF);
-    led[i].setGlobalFactor(0xFF);
-    led[i].setControlViaPointer(true);
-    led[i].setNewFactorAtMin(false);
-    led[i].setNewFactorAtMax(false);
-    led[i].setNewMaxPointerAtMin(true);
-    led[i].setNewMinPointerAtMax(true);
-    led[i].setWaitAtMax1(false);
-    led[i].setWaitAtMin1(false);
-    led[i].setWaitAtMax2(true);
-    led[i].setWaitAtMin2(false);
-    led[i].setProgmemIndex(0);
-    #ifndef PCA9685
-    led[i].setPin2default();
-    #endif
-  }
-
-
 
   oldMillis = millis();
 
   randomSeed(analogRead(0));
 
-  readEeprom();
-  
 //  bluetoothCommunicator.begin(9600);
 
   #ifdef PCA9685
@@ -424,7 +403,7 @@ void RgbLedControl::info()
       Serial.print(led[i].getProgmemIndex());
       Serial.print("\t\t");
       Serial.print(led[i].getFactor());
-      Serial.print("\t\t");
+      Serial.print("\t\t\t");
       Serial.print(led[i].getGlobalFactor());
       Serial.print("\t\t");
       Serial.print(led[i].getColorFactor());
