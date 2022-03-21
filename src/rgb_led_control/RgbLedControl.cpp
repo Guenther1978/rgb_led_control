@@ -16,6 +16,16 @@ void RgbLedControl::setup()
   // read led properties for default play of light
   readEeprom(playOfLight);
 
+for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+  {
+    led[i].setNumber(i);
+    #ifndef PCA
+      led[i].setPin2default();
+    #endif
+  }
+
+
+
   oldMillis = millis();
 
   randomSeed(analogRead(0));
