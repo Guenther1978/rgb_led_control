@@ -11,6 +11,7 @@
 #include "Led.hpp"
 #include "SpeedControl.hpp"
 #include "PwmSource.h"
+#include "Button.hpp"
 
 #ifdef PCA9685
 #include <Adafruit_PWMServoDriver.h>
@@ -18,8 +19,7 @@
 
 /* Constants for EEPROM  */
 #define ADDRESS_NUMBER_OF_DEFAULT_PLAY 0
-#define BYTES_NUMBER_DEFAULT_PLAY 1
-#define MAX_NUMBER_OF_PLAYS 5
+#define ADDRESS_NUMBER_OF_PLAYS 1
 #define LENGTH_OF_LED_PROPERTIES 14
 #define LENGTH_OF_PLAY_PROPERTIES 2 + (3 * LENGTH_OF_LED_PROPERTIES)
 #define OFFSET_RED 2
@@ -32,6 +32,7 @@
 /* Constants */
 #define NUMBER_OF_LEDS 3
 #define NUMBER_OF_PROGMEMS 6
+#define MAX_NUMBER_OF_PLAYS 15
 #define LINEAR 5
 #define NUMBER_OF_PLAYS 4
 #define DEFAULT_PROGMEM_NUMBER 0
@@ -52,6 +53,7 @@ private:
   #else
   Led8bit led[NUMBER_OF_LEDS]; /**< Array of instances of the class Led */
   #endif
+  Button button;
   unsigned char playOfLight;
   unsigned char numberOfPlays;
   unsigned long cycleTime;
@@ -83,6 +85,12 @@ public:
 
   /**@brief sets the play of light*/
   void setPlayOfLight(bool);
+
+  /** @return playOfLight */
+  unsigned char getNumberOfPlays(void);
+
+  /**@brief sets the play of light*/
+  void setNumberOfPlays(void);
 
   /**@brief This method prints an info
    *

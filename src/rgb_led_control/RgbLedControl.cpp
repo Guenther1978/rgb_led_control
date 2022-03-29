@@ -57,6 +57,15 @@ for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
 
 void RgbLedControl::loop()
 {
+  if (button.getDurationOfPressing())
+    {
+      playOfLight ++;
+      if (playOfLight >= NUMBER_OF_PLAYS)
+        {
+          playOfLight = 0;
+        }
+      readEeprom(playOfLight);
+    }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
   {
     if (led[i].letSpeedControlCount())
@@ -288,6 +297,7 @@ void RgbLedControl::loop()
             break;
           case 'x':
           case 'X':
+            setNumberOfPlays();
             break;
           case 'y':
           case 'Y':
@@ -342,10 +352,27 @@ void RgbLedControl::setPlayOfLight(bool bt)
     for (int i = 0; i < NUMBER_OF_LEDS; i ++)
       {
         led[i].setPointerIsChangeable(true);
-        led[i].setFactor(0xFF);
+        led[i].setFactor(0xff);
       }
     readEeprom(playOfLight);
   }
+
+unsigned char RgbLedControl::getNumberOfPlays(void)
+  {
+    return numberOfPlays;
+  }
+
+void RgbLedControl::setNumberOfPlays(void)
+  {
+    byte incomingByte = 0;
+    incomingByte = (byte)getNumber();
+    if (incomingByte < NUMBER_OF_PLAYS)
+      {
+        numberOfPlays = incomingByte;
+      }
+    EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
+  }
+
 
 void RgbLedControl::help()
 {
@@ -373,7 +400,7 @@ void RgbLedControl::help()
   Serial.println("u: global factor");
   Serial.println("v: Start with current play of light");
   Serial.println("w: Save current properties");
-//  Serial.println("x: ");
+  Serial.println("x: Set number of plays");
 //  Serial.println("y: ");
 //  Serial.println("z: ");
   Serial.println();
@@ -959,18 +986,33 @@ void RgbLedControl::readEeprom(void)
       {
         playOfLight = DEFAULT_PLAY_OF_LIGHT;
       }
+    numberOfPlays = EEPROM.read(ADDRESS_NUMBER_OF_PLAYS);
+    if ((numberOfPlays > MAX_NUMBER_OF_PLAYS) || (numberOfPlays == 0))
+      {
+        numberOfPlays = MAX_NUMBER_OF_PLAYS;
+        EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
+      }
   }
 
 void RgbLedControl::readEeprom(uint8_t play)
 {
   uint8_t globalFactor;
   uint8_t content;
-  uint8_t addressStart = BYTES_NUMBER_DEFAULT_PLAY + play * (LENGTH_OF_PLAY_PROPERTIES);
+  uint8_t addressStart = 2 + play * (LENGTH_OF_PLAY_PROPERTIES);
   uint8_t address = addressStart;
+
+  Serial.print(F("Current play of light: "));
+  Serial.println(playOfLight);
+  Serial.println();
 
   Serial.println(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
   Serial.print(F("Number of default play: "));
   Serial.println(EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY));
+  Serial.println();
+
+  Serial.println(ADDRESS_NUMBER_OF_PLAYS);
+  Serial.print(F("Number of plays: "));
+  Serial.println(EEPROM.read(ADDRESS_NUMBER_OF_PLAYS));
   Serial.println();
 
   Serial.print(F("Start address: "));
