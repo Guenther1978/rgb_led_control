@@ -1181,7 +1181,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
   uint8_t cycleTime;
   uint8_t global_factor;
   uint8_t content;
-  uint8_t addressStart = 1 + play * (LENGTH_OF_PLAY_PROPERTIES);
+  uint8_t addressStart = 2 + play * (LENGTH_OF_PLAY_PROPERTIES);
   uint8_t address = addressStart;
 
   Serial.print(F("Saving LED properties for Play of Light: "));
@@ -1194,6 +1194,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
   Serial.println(cycleTime);
   address ++;
 
+  Serial.println(address);
   content = led[0].getGlobalFactor();
   EEPROM.write(address, content);
   Serial.print(F("Global factor: "));
