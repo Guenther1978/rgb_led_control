@@ -64,6 +64,11 @@ void RgbLedControl::loop()
         {
           playOfLight = 0;
         }
+      for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+        {
+          led[i].setPointerIsChangeable(true);
+          led[i].setFactor(0xff);
+        }
       readEeprom(playOfLight);
     }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
