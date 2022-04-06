@@ -368,7 +368,7 @@ void RgbLedControl::setNumberOfPlays(void)
   {
     byte incomingByte = 0;
     incomingByte = (byte)getNumber();
-    if (incomingByte < NUMBER_OF_PLAYS)
+    if (incomingByte < MAX_NUMBER_OF_PLAYS)
       {
         numberOfPlays = incomingByte;
       }
@@ -382,7 +382,7 @@ void RgbLedControl::help()
   Serial.println(F("a: Play of light"));
   Serial.println(F("b: blue LED"));
   Serial.println(F("c: color factor"));
-  Serial.println(F("d: loop duration"));
+  Serial.println(F("d: loop duration / cycle time"));
   Serial.println(F("e: new min pointer at max"));
   Serial.println(F("f: new max pointer at min"));
   Serial.println(F("g: green LED"));
@@ -491,7 +491,7 @@ void RgbLedControl::info()
   Serial.print(F("cycle time / ms:\t"));
   Serial.println(cycleTime);
   Serial.print(F("number of play of lights:\t"));
-  Serial.println(playOfLight);
+  Serial.println(numberOfPlays);
   Serial.print(F("Play of light:\t"));
   Serial.println(playOfLight);
   Serial.println();
