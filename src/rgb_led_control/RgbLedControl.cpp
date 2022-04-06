@@ -490,7 +490,7 @@ void RgbLedControl::info()
   Serial.println(loopDuration);
   Serial.print(F("cycle time / ms:\t"));
   Serial.println(cycleTime);
-  Serial.println(F("number of play of lights:\t"));
+  Serial.print(F("number of play of lights:\t"));
   Serial.println(playOfLight);
   Serial.print(F("Play of light:\t"));
   Serial.println(playOfLight);
