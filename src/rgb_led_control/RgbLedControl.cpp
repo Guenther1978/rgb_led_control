@@ -304,9 +304,6 @@ void RgbLedControl::loop()
           case 'Y':
             setNumberOfPlays();
             break;
-          case 'y':
-          case 'Y':
-            break;
           case 'z':
           case 'Z':
             break;
