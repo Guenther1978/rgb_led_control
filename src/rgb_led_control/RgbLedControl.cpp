@@ -300,8 +300,8 @@ void RgbLedControl::loop()
             writeEeprom(playOfLight);
             info();
             break;
-          case 'x':
-          case 'X':
+          case 'y':
+          case 'Y':
             setNumberOfPlays();
             break;
           case 'y':
