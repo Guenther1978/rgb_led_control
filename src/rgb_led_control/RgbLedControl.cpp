@@ -60,7 +60,7 @@ void RgbLedControl::loop()
   if (button.getDurationOfPressing())
     {
       playOfLight ++;
-      if (playOfLight >= NUMBER_OF_PLAYS)
+      if (playOfLight >= numberOfPlays)
         {
           playOfLight = 0;
         }
