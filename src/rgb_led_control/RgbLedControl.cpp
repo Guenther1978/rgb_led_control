@@ -382,40 +382,40 @@ void RgbLedControl::setNumberOfPlays(void)
 void RgbLedControl::help()
 {
   Serial.println();
-  Serial.println("a: Play of light");
-  Serial.println("b: blue LED");
-  Serial.println("c: color factor");
-  Serial.println("d: loop duration");
-  Serial.println("e: new min pointer at max");
-  Serial.println("f: new max pointer at min");
-  Serial.println("g: green LED");
-  Serial.println("h: Help");
-  Serial.println("i: Info");
-  Serial.println("j: wait at min 1");
-  Serial.println("k: wait at max 1");
-  Serial.println("l: wait at min 2");
-  Serial.println("m: wait at max 2");
-  Serial.println("n: new factor at max");
-  Serial.println("o: offset");
-  Serial.println("p: progmem index");
-  Serial.println("q: new factor at min");
-  Serial.println("r: red LED");
-  Serial.println("s: Save current Porperties");
-  Serial.println("t: Test all LEDs");
-  Serial.println("u: global factor");
-  Serial.println("v: Start with current play of light");
-  Serial.println("w: Save current properties");
-  Serial.println("x: Set number of plays");
-//  Serial.println("y: ");
-//  Serial.println("z: ");
+  Serial.println(F("a: Play of light"));
+  Serial.println(F("b: blue LED"));
+  Serial.println(F("c: color factor"));
+  Serial.println(F("d: loop duration"));
+  Serial.println(F("e: new min pointer at max"));
+  Serial.println(F("f: new max pointer at min"));
+  Serial.println(F("g: green LED"));
+  Serial.println(F("h: Help"));
+  Serial.println(F("i: Info"));
+  Serial.println(F("j: wait at min 1"));
+  Serial.println(F("k: wait at max 1"));
+  Serial.println(F("l: wait at min 2"));
+  Serial.println(F("m: wait at max 2"));
+  Serial.println(F("n: new factor at max"));
+  Serial.println(F("o: offset"));
+  Serial.println(F("p: progmem index"));
+  Serial.println(F("q: new factor at min"));
+  Serial.println(F("r: red LED"));
+  Serial.println(F("s: Save current Porperties"));
+  Serial.println(F("t: Test all LEDs"));
+  Serial.println(F("u: global factor"));
+  Serial.println(F("v: Start with current play of light"));
+  Serial.println(F("w: Save current properties"));
+  Serial.println(F("y: Set number of plays"));
+//  Serial.print(ln("y: ");
+//  Serial.print(ln("z: ");
   Serial.println();
 }
 
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println("number\tcolor\tintensity\tpointer\tpointer_min\tpointer_max\
-\tdarker\tdimmable");
+  Serial.println(F("number\tcolor\tintensity\tpointer\tpointer_min\tpointer_max\
+\tdarker\tdimmable"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -437,8 +437,8 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("PROGMEM_index\tdimFactor\tglobalFactor\tcolorFactor\
-\toffset\tduration\tcounter");
+  Serial.println(F("PROGMEM_index\tdimFactor\tglobalFactor\tcolorFactor\
+\toffset\tduration\tcounter"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -458,8 +458,8 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("newFactorAtMin\tnewFactorAtMax\
-\tnewMaxPointerAtMin\tnewMinPointerAtMax");
+  Serial.println(F("newFactorAtMin\tnewFactorAtMax\
+\tnewMaxPointerAtMin\tnewMinPointerAtMax"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -473,7 +473,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println("waitAtMin1\twaitAtMax1\twaitAtMin2\twaitAtMax2\tpointerIsChangeable");
+  Serial.println(F("waitAtMin1\twaitAtMax1\twaitAtMin2\twaitAtMax2\tpointerIsChangeable"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -489,11 +489,13 @@ void RgbLedControl::info()
    }
 
   Serial.println();
-  Serial.print("loop duration / ms:\t");
+  Serial.print(F("loop duration / ms:\t"));
   Serial.println(loopDuration);
-  Serial.print("cycle time / ms:\t");
+  Serial.print(F("cycle time / ms:\t"));
   Serial.println(cycleTime);
-  Serial.print("Play of light:\t");
+  Serial.println(F("number of play of lights:\t"));
+  Serial.println(playOfLight);
+  Serial.print(F("Play of light:\t"));
   Serial.println(playOfLight);
   Serial.println();
 }
@@ -504,7 +506,7 @@ int8_t RgbLedControl::getNumber()
   int8_t number = -3;
 
   Serial.println();
-  Serial.println("Enter a number");
+  Serial.println(F("Enter a number"));
 
   do
     {
