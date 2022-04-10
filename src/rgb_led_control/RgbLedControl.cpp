@@ -57,19 +57,26 @@ for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
 
 void RgbLedControl::loop()
 {
-  if (button.getDurationOfPressing())
+  if (uint8_t durationOfPressing = button.getDurationOfPressing())
     {
-      playOfLight ++;
-      if (playOfLight >= numberOfPlays)
+      if (durationOfPressing > 4)
         {
-          playOfLight = 0;
+          writeEEPROM();
         }
-      for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+      else
         {
-          led[i].setPointerIsChangeable(true);
-          led[i].setFactor(0xff);
+          playOfLight ++;
+          if (playOfLight >= numberOfPlays)
+            {
+              playOfLight = 0;
+            }
+          for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+            {
+              led[i].setPointerIsChangeable(true);
+              led[i].setFactor(0xff);
+            }
+          readEeprom(playOfLight);
         }
-      readEeprom(playOfLight);
     }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
   {
