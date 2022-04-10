@@ -61,7 +61,7 @@ void RgbLedControl::loop()
     {
       if (durationOfPressing > 4)
         {
-          writeEEPROM();
+          writeEeprom();
         }
       else
         {
