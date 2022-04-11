@@ -375,7 +375,7 @@ void RgbLedControl::setNumberOfPlays(void)
   {
     byte incomingByte = 0;
     incomingByte = (byte)getNumber();
-    if (incomingByte < MAX_NUMBER_OF_PLAYS)
+    if (incomingByte < numberOfPlays)
       {
         numberOfPlays = incomingByte;
       }
