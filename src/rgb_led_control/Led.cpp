@@ -274,6 +274,12 @@ bool Led::getDimmable(void)
 void Led::setDimmable(bool dimmable)
   {
     _dimmable = dimmable;
+    if (_dimmable == false)
+      {
+          _factor = _defaultFactor;
+          _pointerMin = _defaultPointerMin;
+          _pointerMax = _defaultPointerMax;
+      }
   }
 
 
