@@ -1191,8 +1191,6 @@ void RgbLedControl::writeEeprom(void)
 
 void RgbLedControl::writeEeprom(uint8_t play)
 {
-  uint8_t cycleTime;
-  uint8_t global_factor;
   uint8_t content;
   uint8_t addressStart = 2 + play * (LENGTH_OF_PLAY_PROPERTIES);
   uint8_t address = addressStart;
