@@ -74,6 +74,7 @@ void RgbLedControl::loop()
             {
               led[i].setPointerIsChangeable(true);
               led[i].setFactor(0xff);
+              led[i].setPointer(0xff);
             }
           readEeprom(playOfLight);
         }
@@ -362,6 +363,7 @@ void RgbLedControl::setPlayOfLight(bool bt)
       {
         led[i].setPointerIsChangeable(true);
         led[i].setFactor(0xff);
+        led[i].setPointer(0xff);
       }
     readEeprom(playOfLight);
   }
