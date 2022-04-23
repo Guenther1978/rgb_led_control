@@ -377,7 +377,7 @@ void RgbLedControl::setNumberOfPlays(void)
   {
     byte incomingByte = 0;
     incomingByte = (byte)getNumber();
-    if (incomingByte < numberOfPlays)
+    if (incomingByte < NUMBER_OF_PLAYS)
       {
         numberOfPlays = incomingByte;
       }
@@ -1180,6 +1180,8 @@ void RgbLedControl::readEeprom(uint8_t play)
       Serial.println(content);
       Serial.println();
 
+      Serial.print(F("Current play of light: "));
+      Serial.println(playOfLight);
       Serial.println();
     }
 }
