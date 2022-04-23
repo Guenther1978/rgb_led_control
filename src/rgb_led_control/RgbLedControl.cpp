@@ -954,6 +954,8 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
         led[i].setFactor(0xFF);
         led[i].setProgmemIndex(LINEAR);
         led[i].setPointer(getNumber() * 17);
+        led[i].pointer2int();
+        led[i].int2output();
       }
   END_PROPERTY:
     info();
@@ -1042,7 +1044,7 @@ void RgbLedControl::readEeprom(uint8_t play)
   Serial.println(cycleTime);
   address ++;
 
-  globalFactor = EEPROM.read(address + OFFSET_GLOBAL_FACTOR);
+  globalFactor = EEPROM.read(address);
   Serial.println(address);
   if ((globalFactor == 0xFF)||(globalFactor == 0x00))
     {
@@ -1203,7 +1205,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
 
   Serial.println(address);
   EEPROM.write(address + OFFSET_LOOP_DURATION, (uint8_t)cycleTime);
-  Serial.print(F("Time per cycle"));
+  Serial.print(F("Time per cycle: "));
   Serial.println(cycleTime);
   address ++;
 
