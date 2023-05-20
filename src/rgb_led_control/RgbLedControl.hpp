@@ -138,44 +138,23 @@ public:
    */
   void setIndex(bool);
 
-  /**@brief This methods sets the global factor.
-   *
-   * The global factor dims all LEDs.
-   */
-  void setGlobalFactor(bool);
-
   /**@brief This method sets the offset of the brightness of a LED.*/
   void setOffset(bool);
 
-  /**@brief This method toggles if the factor changes.*/
-  void toggleNewFactorAtMax(void);
+  /**@brief This method sets if the factor changes.*/
+  void setNewFactor(void);
+  
+  /**@brief This mehtod sets if the pointer chages at min. position.*/
+  void setNewMinPointerAtMax(void);
 
-  /**@brief This method toggles if the factor changes.*/
-  void toggleNewFactorAtMin(void);
+  /**@brief This mehtod sets if the pointer chages at max. position.*/
+  void setNewMaxPointerAtMin(void);
 
-  /**@brief This mehtod toggles if the pointer chages.*/
-  void toggleNewPointerAtMax(void);
+  /**@brief This method sers if waiting or not at the max. pointer */
+  void setWaitAtMax(void);
 
-  /**@brief This mehtod toggles if the pointer chages at min. position.*/
-  void toggleNewMinPointerAtMax(void);
-
-  /**@brief This mehtod toggles if the pointer chages at max. position.*/
-  void toggleNewMaxPointerAtMin(void);
-
-  /**@brief This method toggles in waiting or not at the max. pointer */
-  void toggleWaitAtMax1(void);
-
-  /**@brief This method toggles in waiting or not at the min. pointer */
-  void toggleWaitAtMin1(void);
-
-  /**@brief This method toggles in staying or not at the max. pointer */
-  void toggleWaitAtMax2(void);
-
-  /**@brief This method toggles in staying or not at the min. pointer */
-  void toggleWaitAtMin2(void);
-
-  /**@brief This methode counts the LEDs which are getting darker */
-  uint8_t countLedsGettingDarker(void);
+  /**@brief This method sets if waiting or not at the min. pointer */
+  void setWaitAtMin(void);
 
   /**@brief Sets the colorfactors */
   void setColorFactors(void);

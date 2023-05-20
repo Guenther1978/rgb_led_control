@@ -182,13 +182,13 @@ void Led::setColorFactor(uint8_t factor)
 // _newFactorAtMax
 
 bool Led::getNewFactor()
-
-  return _newFactorAtMax;
+{
+  return _newFactor;
 }
 
-void Led::setNewFactor(bool newFactorAtMax)
+void Led::setNewFactor(bool newFactor)
 {
-  _newFactorAtMax = newFactorAtMax;
+  _newFactor = newFactor;
 }
 
 
@@ -367,7 +367,7 @@ void Led8bit::pointer2int()
   product = (uint8_t)(255 - content) * _colorFactor >> 8;
   sum = (255 -  product) * (255 - _offset) >> 8;
   sum += _offset;
-  _intensity = (uint8_t)factor * sum >> 8;
+  _intensity = (uint8_t)_factor * sum >> 8;
 }
 
 void Led8bit::int2output(void)
