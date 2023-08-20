@@ -19,8 +19,6 @@ class Led
 {
 private:
   SpeedControl speedControl;
-  unsigned char _color = ' ';
-  bool _controlViaPointer = true;
   uint8_t _pointerMin = 0;
   uint8_t _pointerMax = 255;
   uint8_t _defaultPointerMin = 0;
@@ -30,23 +28,19 @@ private:
   bool _darkerHasChanged = false;
   bool _newMaxPointerAtMin = false;
   bool _newMinPointerAtMax = false;
-  bool _newFactorAtMax = false;
-  bool _newFactorAtMin = false;
-  bool _waitAtMax1 = false;
-  bool _waitAtMin1 = false;
-  bool _waitAtMax2 = false;
-  bool _waitAtMin2 = false;
+  bool _newFactor = false;
+  bool _waitAtMax = false;
+  bool _waitAtMin = false;
   bool _pointerIsAtMax = false;
   bool _pointerIsAtMin = false;
-    bool _pointerIsChangeable = true;
-    bool _dimmable = true;
+  bool _pointerIsChangeable = true;
+  bool _dimmable = true;
 
 protected:
   uint8_t _number = 0;
   uint8_t _progmemIndex = 0;
   uint8_t _pointer = 0;
   uint8_t _factor = 0xFF;
-  uint8_t _globalFactor = 0xFF;
   uint8_t _colorFactor = 0xFF;
   uint8_t _offset = 0;
 
@@ -106,40 +100,16 @@ public:
   /* Waiting */
 
   /** @return waitAtMax */
-  bool getWaitAtMax1(void);
+  bool getWaitAtMax(void);
 
   /** @param waitAtMax */
-  void setWaitAtMax1(bool waitAtMax);
-
-  /** @brief toggle waitAtMax */
-  void toggleWaitAtMax1(void);
+  void setWaitAtMax(bool waitAtMax);
 
   /** @return waitAtMin */
-  bool getWaitAtMin1(void);
+  bool getWaitAtMin(void);
 
   /** @param waitAtMax */
-  void setWaitAtMin1(bool waitAtMin);
-
-  /** @brief toggle waitAtMin */
-  void toggleWaitAtMin1(void);
-
-  /** @return waitAtMax */
-  bool getWaitAtMax2(void);
-
-  /** @param waitAtMax */
-  void setWaitAtMax2(bool waitAtMax);
-
-  /** @brief toggle waitAtMax */
-  void toggleWaitAtMax2(void);
-
-  /** @return waitAtMin */
-  bool getWaitAtMin2(void);
-
-  /** @param waitAtMax */
-  void setWaitAtMin2(bool waitAtMin);
-
-  /** @brief toggle waitAtMin */
-  void toggleWaitAtMin2(void);
+  void setWaitAtMin(bool waitAtMin);
 
 
   /* pointer */
@@ -207,12 +177,6 @@ public:
   /**@param factor*/
   void setFactor(uint8_t);
 
-  /**@return globalFactor*/
-  uint8_t getGlobalFactor(void);
-
-  /**@param globalFactor*/
-  void setGlobalFactor(uint8_t);
-
   /**@return colorFactor*/
   uint8_t getColorFactor(void);
 
@@ -220,25 +184,15 @@ public:
   void setColorFactor(uint8_t);
 
   /**@return factor*/
-  bool getNewFactorAtMax(void);
+  bool getNewFactor(void);
 
   /**@return factor*/
-  void setNewFactorAtMax(bool);
+  void setNewFactor(bool);
   
-  /**@return factor*/
-  bool getNewFactorAtMin(void);
-
-  /**@return factor*/
-  void setNewFactorAtMin(bool);
-
   /**@brief sets factor to default value*/
   void setFactor2Default(void);
 
-  /*@brief toggle if new factors are set or not*/
-  void toggleNewFactorAtMin(void);
-  void toggleNewFactorAtMax(void);
-  
-  
+
   // _darker
 
   /**@return darker of the LED*/

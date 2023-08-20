@@ -4,71 +4,6 @@
 // get and set methods
 ///////////////////////
 
-// _number
-
-uint8_t Led::getNumber(void)
-{
-  return _number;
-}
-
-void Led::setNumber(uint8_t number)
-{
-  _number = number;
-}
-
-
-/* color */
-
-unsigned char Led::getColor(void)
-{
-  return _color;
-}
-
-void Led::setColor(unsigned char color)
-{
-  _color = color;
-}
-
-
-/* control via pointer */
-
-bool Led::getControlViaPointer(void)
-  {
-    return _controlViaPointer;
-  }
-
-void Led::setControlViaPointer(bool controlViaPointer)
-  {
-    _controlViaPointer = controlViaPointer;
-  }
-
-void Led::toggleControlViaPointer(void)
-  {
-    _controlViaPointer =! _controlViaPointer;
-    if (_controlViaPointer == false)
-      {
-        _newMinPointerAtMax = false;
-        setMinPointer2Default();
-        _newMaxPointerAtMin = false;
-        setMaxPointer2Default();
-        if (pgm_read_word_near(intensities_8bit_0) == MAX_INTENSITY)
-          {
-            _newFactorAtMin = true;
-          }
-        else if(pgm_read_word_near(intensities_8bit_0 + 255) == MAX_INTENSITY)
-          {
-            _newFactorAtMax = true;
-          }
-       }
-    else
-      {
-        _newFactorAtMin = false;
-        _newFactorAtMax = false;
-        _factor = _defaultFactor;
-        _newMinPointerAtMax = true;
-        _newMaxPointerAtMin = true;
-      }
-  }
 
 
 /* offset */
@@ -86,81 +21,25 @@ void Led::setOffset(uint8_t offset)
 
 /* Waiting */
 
-bool Led::getWaitAtMax1(void)
+bool Led::getWaitAtMax(void)
   {
-    return _waitAtMax1;
+    return _waitAtMax;
   }
 
-void Led::setWaitAtMax1(bool waitAtMax)
+void Led::setWaitAtMax(bool waitAtMax)
   {
-    _waitAtMax1 = waitAtMax;
+    _waitAtMax = waitAtMax;
   }
 
-void Led::toggleWaitAtMax1(void)
-{
-  _waitAtMax1 =! _waitAtMax1;
-  if (_waitAtMax1 == false)
-    {
-      _pointerIsChangeable = true;
-    }
-}
-
-bool Led::getWaitAtMin1(void)
+bool Led::getWaitAtMin(void)
   {
-    return _waitAtMin1;
+    return _waitAtMin;
   }
 
-void Led::setWaitAtMin1(bool waitAtMin)
+void Led::setWaitAtMin(bool waitAtMin)
   {
-    _waitAtMin1 = waitAtMin;
+    _waitAtMin = waitAtMin;
   }
-
-void Led::toggleWaitAtMin1(void)
-{
-  _waitAtMin1 =! _waitAtMin1;
-  if (_waitAtMin1 == false)
-    {
-      _pointerIsChangeable = true;
-    }
-}
-
-bool Led::getWaitAtMax2(void)
-  {
-    return _waitAtMax2;
-  }
-
-void Led::setWaitAtMax2(bool waitAtMax)
-  {
-    _waitAtMax2 = waitAtMax;
-  }
-
-void Led::toggleWaitAtMax2(void)
-{
-  _waitAtMax2 =! _waitAtMax2;
-  if (_waitAtMax2 == false)
-    {
-      _pointerIsChangeable = true;
-    }
-}
-
-bool Led::getWaitAtMin2(void)
-  {
-    return _waitAtMin2;
-  }
-
-void Led::setWaitAtMin2(bool waitAtMin)
-  {
-    _waitAtMin2 = waitAtMin;
-  }
-
-void Led::toggleWaitAtMin2(void)
-{
-  _waitAtMin2 =! _waitAtMin2;
-  if (_waitAtMin2 == false)
-    {
-      _pointerIsChangeable = true;
-    }
-}
 
 
 /* progmem_index */
@@ -295,16 +174,6 @@ void Led::setFactor(uint8_t factor)
   _factor = factor;
 }
 
-uint8_t Led::getGlobalFactor()
-{
-  return _globalFactor;
-}
-
-void Led::setGlobalFactor(uint8_t factor)
-{
-  _globalFactor = factor;
-}
-
 uint8_t Led::getColorFactor()
 {
   return _colorFactor;
@@ -318,42 +187,14 @@ void Led::setColorFactor(uint8_t factor)
 
 // _newFactorAtMax
 
-bool Led::getNewFactorAtMax()
+bool Led::getNewFactor()
 {
-  return _newFactorAtMax;
+  return _newFactor;
 }
 
-void Led::setNewFactorAtMax(bool newFactorAtMax)
+void Led::setNewFactor(bool newFactor)
 {
-  _newFactorAtMax = newFactorAtMax;
-}
-
-void Led::toggleNewFactorAtMax(void)
-{
-  _newFactorAtMax =! _newFactorAtMax;
-  if (_newFactorAtMax == false)
-    {
-      _factor = _defaultFactor;
-    }
-}
-
-bool Led::getNewFactorAtMin()
-{
-  return _newFactorAtMin;
-}
-
-void Led::setNewFactorAtMin(bool newFactorAtMin)
-{
-  _newFactorAtMin = newFactorAtMin;
-}
-
-void Led::toggleNewFactorAtMin(void)
-{
-  _newFactorAtMin =! _newFactorAtMin;
-  if (_newFactorAtMin == false)
-    {
-      _factor = _defaultFactor;
-    }  
+  _newFactor = newFactor;
 }
 
 
@@ -503,7 +344,6 @@ void Led8bit::pointer2int()
   uint8_t content;
   uint8_t product;
   uint8_t sum;
-  uint8_t factor;
 
   switch(_progmemIndex)
     {
@@ -530,11 +370,10 @@ void Led8bit::pointer2int()
       break;
     }
 
-  factor = _globalFactor * _colorFactor >> 8;
-  product = (uint8_t)(255 - content) * _factor >> 8;
+  product = (uint8_t)(255 - content) * _colorFactor >> 8;
   sum = (255 -  product) * (255 - _offset) >> 8;
   sum += _offset;
-  _intensity = (uint8_t)factor * sum >> 8;
+  _intensity = (uint8_t)_factor * sum >> 8;
 }
 
 void Led8bit::int2output(void)
