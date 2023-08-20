@@ -338,34 +338,6 @@ void RgbLedControl::setNumberOfPlays(void)
 void RgbLedControl::help()
 {
   Serial.println();
-<<<<<<< HEAD
-  Serial.println(F("a: Play of light"));
-  Serial.println(F("b: blue LED"));
-  Serial.println(F("c: color factor"));
-  Serial.println(F("d: loop duration / cycle time"));
-  Serial.println(F("e: new min pointer at max"));
-  Serial.println(F("f: new max pointer at min"));
-  Serial.println(F("g: green LED"));
-  Serial.println(F("h: Help"));
-  Serial.println(F("i: Info"));
-  Serial.println(F("j: wait at min 1"));
-  Serial.println(F("k: wait at max 1"));
-  Serial.println(F("l: wait at min 2"));
-  Serial.println(F("m: wait at max 2"));
-  Serial.println(F("n: new factor at max"));
-  Serial.println(F("o: offset"));
-  Serial.println(F("p: progmem index"));
-  Serial.println(F("q: new factor at min"));
-  Serial.println(F("r: red LED"));
-  Serial.println(F("s: Save current Porperties"));
-  Serial.println(F("t: Test all LEDs"));
-  Serial.println(F("u: global factor"));
-  Serial.println(F("v: Start with current play of light"));
-  Serial.println(F("w: Save current properties"));
-  Serial.println(F("y: Set number of plays"));
-//  Serial.print(ln("y: ");
-//  Serial.print(ln("z: ");
-=======
   Serial.println("a: Play of light");
   Serial.println("b: blue LED");
   Serial.println("c: color factor");
@@ -391,7 +363,6 @@ void RgbLedControl::help()
 //  Serial.println("x: ");
 //  Serial.println("y: ");
 //  Serial.println("z: ");
->>>>>>> feature_clean_led_class
   Serial.println();
 }
 
