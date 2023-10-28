@@ -32,7 +32,7 @@
 /* Constants */
 #define NUMBER_OF_LEDS 3
 #define NUMBER_OF_PROGMEMS 6
-#define MAX_NUMBER_OF_PLAYS 15
+#define MAX_NUMBER_OF_PLAYS 10
 #define LINEAR 5
 #define NUMBER_OF_PLAYS 15
 #define DEFAULT_PROGMEM_NUMBER 0
@@ -56,6 +56,7 @@ private:
   Button button;
   unsigned char playOfLight;
   unsigned char numberOfPlays;
+  unsigned char defaultPlayOfLight;
   unsigned long cycleTime;
   unsigned long loopDuration;
   unsigned long oldMillis;
@@ -85,6 +86,12 @@ public:
 
   /**@brief sets the play of light*/
   void setPlayOfLight(bool);
+  
+  /** @return defaultplayOfLight */
+  unsigned char getDefaultPlayOfLight(void);
+
+  /**@brief sets the play of light*/
+  void setDefaultPlayOfLight(bool);
 
   /** @return playOfLight */
   unsigned char getNumberOfPlays(void);

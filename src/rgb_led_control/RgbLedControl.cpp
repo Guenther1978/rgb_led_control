@@ -318,6 +318,32 @@ void RgbLedControl::setPlayOfLight(bool bt)
     readEeprom(playOfLight);
   }
 
+unsigned char RgbLedControl::getDefaultPlayOfLight(void)
+  {
+    return defaultPlayOfLight;
+  }
+
+void RgbLedControl::setDefaultPlayOfLight(bool bt)
+  {
+    byte incomingByte = 0;
+    if (!bt)
+      {
+        incomingByte = (byte)getNumber();
+        if (incomingByte < numberOfPlays)
+          {
+            defaultPlayOfLight = incomingByte;
+          }
+      }
+
+    for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+      {
+        led[i].setPointerIsChangeable(true);
+        led[i].setFactor(0xff);
+        led[i].setPointer(0xff);
+      }
+    readEeprom(playOfLight);
+  }
+  
 unsigned char RgbLedControl::getNumberOfPlays(void)
   {
     return numberOfPlays;
@@ -354,6 +380,7 @@ void RgbLedControl::help()
   Serial.println("n: new factor");
   Serial.println("o: offset");
   Serial.println("p: progmem index");
+  Serial.println("q: default play of ligth");
   Serial.println("r: red LED");
   Serial.println("s: Save current Porperties");
   Serial.println("t: Test all LEDs");
@@ -802,11 +829,12 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
 
 void RgbLedControl::readEeprom(void)
   {
-    playOfLight = EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
-    if (playOfLight > MAX_NUMBER_OF_PLAYS)
+    defaultPlayOfLight = EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
+    if (defaultPlayOfLight > MAX_NUMBER_OF_PLAYS)
       {
-        playOfLight = DEFAULT_PLAY_OF_LIGHT;
+        defaultPlayOfLight = DEFAULT_PLAY_OF_LIGHT;
       }
+    playOfLight = defaultPlayOfLight;
     numberOfPlays = EEPROM.read(ADDRESS_NUMBER_OF_PLAYS);
     if ((numberOfPlays > MAX_NUMBER_OF_PLAYS) || (numberOfPlays == 0))
       {
