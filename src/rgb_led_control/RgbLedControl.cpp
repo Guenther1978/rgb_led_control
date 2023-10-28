@@ -396,7 +396,7 @@ void RgbLedControl::help()
 void RgbLedControl::info()
 {  
   Serial.println();
-  Serial.println(F("number\tcolor\tintensity\tpointer\tpointer_min\tpointer_max\
+  Serial.println(F("intensity\tpointer\tpointer_min\tpointer_max\
 \tdarker\tdimmable"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
@@ -415,7 +415,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("PROGMEM_index\tdimFactor\tglobalFactor\tcolorFactor\
+  Serial.println(F("PROGMEM_index\tdimFactor\tcolorFactor\
 \toffset\tduration\tcounter"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
@@ -434,8 +434,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("newFactorAtMin\tnewFactorAtMax\
-\tnewMaxPointerAtMin\tnewMinPointerAtMax"));
+  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -447,7 +446,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("waitAtMin1\twaitAtMax1\twaitAtMin2\twaitAtMax2\tpointerIsChangeable"));
+  Serial.println(F("waitAtMin\twaitAtMax\tpointerIsChangeable"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -953,14 +952,14 @@ void RgbLedControl::readEeprom(uint8_t play)
       Serial.println(address);
       content = EEPROM.read(address);
       led[i].setWaitAtMin((bool)content);
-      Serial.print(F("Wait at min 1: "));
+      Serial.print(F("Wait at min: "));
       Serial.println(content);
       address ++;
 
       Serial.println(address);
       content = EEPROM.read(address);
       led[i].setWaitAtMax((bool)content);
-      Serial.print(F("Wait at max 1: "));
+      Serial.print(F("Wait at max: "));
       Serial.println(content);
       Serial.println();
       address ++;
@@ -1031,7 +1030,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
       Serial.println(address);
       content = (uint8_t)led[i].getNewFactor();
       EEPROM.write(address, content);
-      Serial.print(F("New Factor at min: "));
+      Serial.print(F("New Factor: "));
       Serial.println(content);
       address ++;
 
@@ -1052,14 +1051,14 @@ void RgbLedControl::writeEeprom(uint8_t play)
       Serial.println(address);
       content = (uint8_t)led[i].getWaitAtMin();
       EEPROM.write(address, content);
-      Serial.print(F("Wait at min 1: "));
+      Serial.print(F("Wait at min: "));
       Serial.println(content);
       address ++;
 
       Serial.println(address);
       content = (uint8_t)led[i].getWaitAtMax();
       EEPROM.write(address, content);
-      Serial.print(F("Wait at max 1: "));
+      Serial.print(F("Wait at max: "));
       Serial.println(content);
       address ++;
 
