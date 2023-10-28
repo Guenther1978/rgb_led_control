@@ -944,6 +944,7 @@ void RgbLedControl::readEeprom(uint8_t play)
 void RgbLedControl::writeEeprom(void)
 {
   EEPROM.write(ADDRESS_NUMBER_OF_DEFAULT_PLAY, playOfLight);
+  EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
 }
 
 void RgbLedControl::writeEeprom(uint8_t play)
