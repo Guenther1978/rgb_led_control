@@ -683,7 +683,7 @@ void RgbLedControl::setWaitAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].toggleNewMinPointerAtMax();
+      led[i].setNewMinPointerAtMax(getBoolean());
     }
 }
 
@@ -691,7 +691,7 @@ void RgbLedControl::setWaitAtMax(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].toggleNewMinPointerAtMax();
+      led[i].setNewMinPointerAtMax(getBoolean());
     }
 }
 
@@ -699,7 +699,7 @@ void RgbLedControl::setNewFactor(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].toggleNewMinPointerAtMax();
+      led[i].setNewMinPointerAtMax(getBoolean());
     }
 }
 
@@ -707,7 +707,7 @@ void RgbLedControl::setNewMinPointerAtMax(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].toggleNewMinPointerAtMax();
+      led[i].setNewMinPointerAtMax(getBoolean());
     }
 }
 
@@ -715,7 +715,7 @@ void RgbLedControl::setNewMaxPointerAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].toggleNewMaxPointerAtMin();
+      led[i].setNewMaxPointerAtMin(getBoolean());
     }
 }
 
