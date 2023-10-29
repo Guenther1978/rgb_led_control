@@ -683,7 +683,7 @@ void RgbLedControl::setWaitAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setNewMinPointerAtMax(getBoolean());
+      led[i].setWaitAtMin(getBoolean());
     }
 }
 
@@ -691,7 +691,7 @@ void RgbLedControl::setWaitAtMax(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setNewMinPointerAtMax(getBoolean());
+      led[i].setWaitAtMax(getBoolean());
     }
 }
 
