@@ -153,6 +153,9 @@ public:
    */
   void setIndex(bool);
 
+  /**@brief This method sers if waiting or not at the max. pointer */
+  void setDimmable(void);
+
   /**@brief This method sets the offset of the brightness of a LED.*/
   void setOffset(bool);
 

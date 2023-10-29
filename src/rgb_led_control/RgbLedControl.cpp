@@ -173,7 +173,7 @@ void RgbLedControl::loop()
             break;
           case 'd':
           case 'D':
-            changeLoopDuration(false);
+             setDimmable();
             info();
             break;
           case 'e':
@@ -210,6 +210,7 @@ void RgbLedControl::loop()
             break;
           case 'l':
           case 'L':
+            changeLoopDuration(false);
             break;
           case 'm':
           case 'M':
@@ -367,16 +368,16 @@ void RgbLedControl::help()
   Serial.println("a: Play of light");
   Serial.println("b: blue LED");
   Serial.println("c: color factor");
-  Serial.println("d: loop duration");
+  Serial.println("d: dimmable");
   Serial.println("e: new min pointer at max");
   Serial.println("f: new max pointer at min");
   Serial.println("g: green LED");
   Serial.println("h: Help");
   Serial.println("i: Info");
-  Serial.println("j: wait at min 1");
-  Serial.println("k: wait at max 1");
-  Serial.println("l: wait at min 2");
-  Serial.println("m: wait at max 2");
+  Serial.println("j: wait at min");
+  Serial.println("k: wait at max");
+  Serial.println("l: loop duration");
+//  Serial.println("m: wait at max 2");
   Serial.println("n: new factor");
   Serial.println("o: offset");
   Serial.println("p: progmem index");
@@ -671,6 +672,13 @@ void RgbLedControl::setOffset(bool bt)
       }
   }
 
+void RgbLedControl::setDimmable(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      led[i].setDimmable(getBoolean());
+    }
+}
 void RgbLedControl::setWaitAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
