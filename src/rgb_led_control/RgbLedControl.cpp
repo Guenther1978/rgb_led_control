@@ -237,10 +237,11 @@ void RgbLedControl::loop()
             break;
           case 'r':
           case 'R':
+	    setMinPointer();
             break;
           case 's':
           case 'S':
-            writeEeprom(playOfLight);
+            setMaxPointer();
             break;
           case 't':
           case 'T':
@@ -382,8 +383,8 @@ void RgbLedControl::help()
   Serial.println("o: offset");
   Serial.println("p: progmem index");
   Serial.println("q: default play of ligth");
-  Serial.println("r: red LED");
-  Serial.println("s: Save current Porperties");
+  Serial.println("r: min pointer");
+  Serial.println("s: max pointer");
   Serial.println("t: Test all LEDs");
   Serial.println("u: global factor");
   Serial.println("v: Start with current play of light");
@@ -617,6 +618,26 @@ void RgbLedControl::setColorFactors()
         Serial.print("Factor ");
         Serial.println(": ");
         led[i].setColorFactor(17 * getNumber());
+      }
+  }
+
+void RgbLedControl::setMinPointer()
+  {
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        Serial.print("Factor ");
+        Serial.println(": ");
+        led[i].setMinPointer(17 * getNumber());
+      }
+  }
+
+void RgbLedControl::setMaxPointer()
+  {
+    for (int i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        Serial.print("Factor ");
+        Serial.println(": ");
+        led[i].setMaxPointer(17 * getNumber());
       }
   }
 

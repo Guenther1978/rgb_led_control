@@ -168,6 +168,12 @@ public:
   /**@brief This mehtod sets if the pointer chages at max. position.*/
   void setNewMaxPointerAtMin(void);
 
+  /**@brief This mehtod sets min. pointer.*/
+  void setMinPointer(void);
+
+  /**@brief This mehtod sets max. pointer.*/
+  void setMaxPointer(void);
+
   /**@brief This method sers if waiting or not at the max. pointer */
   void setWaitAtMax(void);
 
