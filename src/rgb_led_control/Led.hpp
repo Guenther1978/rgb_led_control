@@ -1,5 +1,5 @@
-#ifndef LED_H
-#define LED_H
+#ifndef RGBLEDCONTROL_LED_H_
+#define RGBLEDCONTROL_LED_H_
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -13,7 +13,22 @@
 #define MAX_INTENSITY 255
 #endif
 
+const uint8_t kBitDimmable = 0x01;
+const uint8_t kBitNewFactor = 0x02;
+const uint8_t kBitNewMinPointerAtMax = 0x04;
+const uint8_t kBitNewMaxPointerAtMin = 0x08;
+const uint8_t kBitWaitAtMin = 0x10;
+const uint8_t kBitWaitAtMax = 0x20;
+
 const uint8_t pwmPins[] = {3, 5, 6, 9, 10, 11};
+
+struct LedDefaultProperties {
+  uint8_t default_booleans;
+  uint8_t progmem_index;
+  uint8_t factor;
+  uint8_t pointer_min;
+  uint8_t pointer_max;
+}
 
 class Led
 {
@@ -25,7 +40,7 @@ private:
   uint8_t _defaultPointerMax = 255;
   uint8_t _defaultFactor = 0xFF;
   bool _darker = true;
-  bool _darkerHasChanged = false;
+  bool _darkerHasChanged = false;}
   bool _newMaxPointerAtMin = false;
   bool _newMinPointerAtMax = false;
   bool _newFactor = false;
@@ -48,6 +63,14 @@ public:
   ///////////////////////
   // get and set methods
   ///////////////////////
+
+  /* default values*/
+  uint8_t getDefaultPointerMin(void);
+  void setDefaultPointerMin(uint8_t);
+  uint8_t getDefaultPointerMax(void);
+  void setGefaultPointerMin(uint8_t);
+  uint8_t getDefaultFactor(void);
+  void setDefaultFactor(void);
 
   /* number */
 
@@ -331,4 +354,4 @@ public:
   void int2output(void);
 };
 
-#endif
+#endif    // RGB_LED_CONTROL_H_
