@@ -28,7 +28,7 @@ struct LedDefaultProperties {
   uint8_t factor;
   uint8_t pointer_min;
   uint8_t pointer_max;
-}
+};
 
 class Led
 {
@@ -40,7 +40,7 @@ private:
   uint8_t _defaultPointerMax = 255;
   uint8_t _defaultFactor = 0xFF;
   bool _darker = true;
-  bool _darkerHasChanged = false;}
+  bool _darkerHasChanged = false;
   bool _newMaxPointerAtMin = false;
   bool _newMinPointerAtMax = false;
   bool _newFactor = false;
@@ -266,6 +266,15 @@ public:
    */
   void changePointer(void);
 
+  ///
+  /// Save default properties to the internal eeprom
+  ///
+  void saveToEeprom(uint8_t);
+
+  ///
+  /// Load default properties from the internal eeprom
+  ///
+  void loadFromEeprom(uint8_t);
 
   ////////////////////////////////////////////////
   // methods dealing with the class SpeedControl
