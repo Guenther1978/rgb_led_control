@@ -44,6 +44,16 @@
 #define DELAY_TEST 1000
 #define ASCII_OFFSET 48
 
+struct RgbDefaultPropertie {
+  uint8_t number_of_plays;
+  uint8_t play_at_por;
+  uint8_t number_of_leds;
+  unsigned char language;
+};
+
+const uint8_t pins[6] {3, 5, 6, 9, 10, 11};
+//uint8_t colors[6];
+
 class RgbLedControl
 {
 private:

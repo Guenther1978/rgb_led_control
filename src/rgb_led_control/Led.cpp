@@ -1,4 +1,8 @@
+#include <Arduino.h>
+#include <EEPROM.h>
+
 #include "Led.hpp"
+
 
 ///////////////////////
 // get and set methods
@@ -278,6 +282,74 @@ void Led::changePointer()
     }
 }
 
+void Led::saveToEeprom(uint8_t address) {
+  LedDefaultProperties content;
+
+  if (_dimmable) {
+    content.default_booleans |= kBitDimmable;
+  }
+  else {
+    content.default_booleans &= ~kBitDimmable;
+  }
+
+  if (_newFactor) {
+    content.default_booleans |= kBitNewFactor;
+  }
+  else {
+    content.default_booleans &= ~kBitNewFactor;
+  }
+
+  if (_newMinPointerAtMax) {
+    content.default_booleans |= kBitNewMinPointerAtMax;
+  }
+  else {
+    content.default_booleans &= ~kBitNewMinPointerAtMax;
+  }
+
+  if (_newMaxPointerAtMin) {
+    content.default_booleans |= kBitNewMaxPointerAtMin;
+  }
+  else {
+    content.default_booleans &= ~kBitNewMaxPointerAtMin;
+  }
+
+  if (_waitAtMin) {
+    content.default_booleans |= kBitWaitAtMin;
+  }
+  else {
+    content.default_booleans &= ~kBitWaitAtMin;
+  }
+
+  if (_waitAtMax) {
+    content.default_booleans |= kBitWaitAtMax;
+  }
+  else {
+    content.default_booleans &= ~kBitWaitAtMax;
+  }
+
+  content.progmem_index = _progmemIndex;
+  content.factor = _defaultFactor;
+  content.pointer_min = _defaultPointerMin;
+  content.pointer_max = _defaultPointerMax;
+
+  EEPROM.put (address, content);
+}
+
+void Led::loadFromEeprom(uint8_t address) {
+  LedDefaultProperties content;
+  EEPROM.get (address, content);
+
+  _dimmable = content.default_booleans & kBitDimmable;
+  _newFactor = content.default_booleans & kBitNewFactor;
+  _newMinPointerAtMax = content.default_booleans & kBitNewMinPointerAtMax;
+  _newMaxPointerAtMin = content.default_booleans & kBitNewMaxPointerAtMin;
+  _waitAtMin = content.default_booleans & kBitWaitAtMin;
+  _waitAtMax = content.default_booleans & kBitWaitAtMax;
+  _progmemIndex = content.progmem_index;
+  _defaultFactor = content.factor;
+  _defaultPointerMin = content.pointer_min;
+  _defaultPointerMax = content.pointer_max;
+}
 
 ////////////////////////////////////////////////
 // methods dealing with the class SpeedControl
