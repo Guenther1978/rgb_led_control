@@ -44,10 +44,11 @@
 #define DELAY_TEST 1000
 #define ASCII_OFFSET 48
 
-struct RgbDefaultPropertie {
+struct RgbDefaultProperties {
   uint8_t number_of_plays;
   uint8_t play_at_por;
   uint8_t number_of_leds;
+  unsigned char format_of_numbers;
   unsigned char language;
 };
 

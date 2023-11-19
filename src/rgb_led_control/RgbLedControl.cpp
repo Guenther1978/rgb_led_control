@@ -857,25 +857,19 @@ void RgbLedControl::propertiesOfLed(uint8_t i)
 
 void RgbLedControl::readEeprom(void)
   {
-    defaultPlayOfLight = EEPROM.read(ADDRESS_NUMBER_OF_DEFAULT_PLAY);
-    if (defaultPlayOfLight > MAX_NUMBER_OF_PLAYS)
-      {
-        defaultPlayOfLight = DEFAULT_PLAY_OF_LIGHT;
-      }
-    playOfLight = defaultPlayOfLight;
-    numberOfPlays = EEPROM.read(ADDRESS_NUMBER_OF_PLAYS);
-    if ((numberOfPlays > MAX_NUMBER_OF_PLAYS) || (numberOfPlays == 0))
-      {
-        numberOfPlays = MAX_NUMBER_OF_PLAYS;
-        EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
-      }
+    RgbDefaultProperties content;
+    EEPROM.get (0, content);
+
+    content.number_of_plays;
+    content.play_at_por;
+    content.number_of_leds;
+    content.format_of_numbers;
+    content.language;
   }
 
 void RgbLedControl::readEeprom(uint8_t play)
 {
-  uint8_t globalFactor;
-  uint8_t content;
-  uint8_t addressStart = 2 + play * (LENGTH_OF_PLAY_PROPERTIES);
+  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties));
   uint8_t address = addressStart;
 
   Serial.print(F("Current play of light: "));
@@ -908,92 +902,7 @@ void RgbLedControl::readEeprom(uint8_t play)
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setColorFactor(content);
-      Serial.print(F("Color Factor: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setOffset(content);
-      Serial.print(F("Offset: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setProgmemIndex(content & 0x0F);
-      Serial.print(F("Progmem Index: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setDimmable((bool)content);
-      Serial.print(F("Dimmable: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      if (content == 0xFF)
-        {
-          led[i].setMinPointer(0);
-        }
-      else
-        {
-          led[i].setMinPointer(content);
-        }
-      Serial.print(F("Min. Pointer: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setMaxPointer(content);
-      Serial.print(F("Max. Pointer: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setNewFactor((bool)content);
-      Serial.print(F("New Factor:"));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setNewMinPointerAtMax((bool)content);
-      Serial.print(F("New min pointer at max: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setNewMaxPointerAtMin((bool)content);
-      Serial.print(F("New max pointer at min: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setWaitAtMin((bool)content);
-      Serial.print(F("Wait at min: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = EEPROM.read(address);
-      led[i].setWaitAtMax((bool)content);
-      Serial.print(F("Wait at max: "));
-      Serial.println(content);
-      Serial.println();
-      address ++;
-
-      Serial.println();
+      led[i].loadFromEeprom(address + i * sizeof(LedDefaultProperties));
     }
 }
 
