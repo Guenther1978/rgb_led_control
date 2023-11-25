@@ -26,6 +26,16 @@ void RgbLedControl::setup()
   while (!Serial);
   Serial.println("Setup completed");
   Serial.println();
+
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+      {
+        led[i].setNumber(i);
+        #ifndef PCA
+          led[i].setPin2default();
+        #endif
+      }
+
+
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
     {
       Serial.println();
