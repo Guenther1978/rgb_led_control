@@ -30,7 +30,10 @@ void RgbLedControl::setup()
     {
       Serial.println();
       #ifndef PCA9685
-      Serial.print("Pin: ");
+      led[i].setPin(pins[i]);
+      Serial.print("Pin ");
+      Serial.print(i);
+      Serial.print(": ");
       Serial.println(led[i].getPin());
       #endif
       Serial.println();
