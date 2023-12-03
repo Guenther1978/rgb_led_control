@@ -66,6 +66,12 @@ void RgbLedControl::loop()
     }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
   {
+    led[i].pointer2int();
+    #ifdef PCA9685
+    pwm.setPWM(led[i].getNumber(), 0, led[i].getIntensity());
+    #else
+    led[i].int2output();
+    #endif
     if (led[i].letSpeedControlCount())
     {
       led[i].changePointer();
@@ -144,11 +150,6 @@ void RgbLedControl::loop()
               }
           }
       }
-      #ifdef PCA9685
-      pwm.setPWM(led[i].getNumber(), 0, led[i].getIntensity());
-      #else
-      led[i].int2output();
-      #endif
     }
   }
   loopDuration = millis() - oldMillis;
@@ -176,7 +177,7 @@ void RgbLedControl::loop()
             break;
           case 'd':
           case 'D':
-             setDimmable();
+            setDimmable();
             info();
             break;
           case 'e':
@@ -240,7 +241,7 @@ void RgbLedControl::loop()
             break;
           case 'r':
           case 'R':
-	    setMinPointer();
+      	    setMinPointer();
             break;
           case 's':
           case 'S':
@@ -370,12 +371,12 @@ void RgbLedControl::help()
 {
   Serial.println();
   Serial.println("a: Play of light");
-  Serial.println("b: blue LED");
+//  Serial.println("b: blue LED");
   Serial.println("c: color factor");
   Serial.println("d: dimmable");
   Serial.println("e: new min pointer at max");
   Serial.println("f: new max pointer at min");
-  Serial.println("g: green LED");
+//  Serial.println("g: green LED");
   Serial.println("h: Help");
   Serial.println("i: Info");
   Serial.println("j: wait at min");
@@ -393,7 +394,7 @@ void RgbLedControl::help()
   Serial.println("v: Start with current play of light");
   Serial.println("w: Save current properties");
 //  Serial.println("x: ");
-//  Serial.println("y: ");
+  Serial.println("y: Set number of plays");
 //  Serial.println("z: ");
   Serial.println();
 }
