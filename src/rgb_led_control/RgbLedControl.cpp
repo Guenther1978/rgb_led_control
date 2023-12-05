@@ -29,7 +29,7 @@ void RgbLedControl::setup()
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
       {
-        led[i].setNumber(i);
+        led[i].setPin(i);
         #ifndef PCA
           led[i].setPin2default();
         #endif
@@ -659,23 +659,23 @@ void RgbLedControl::setIndex(bool bt)
 {
   int8_t newIndex = -1;
 
-  if (bt)
-  {
-//    if (bluetoothCommunicator.available())
-//    {
-//      newIndex = bluetoothCommunicator.read() - ASCII_OFFSET;
-//    }
-  }
-  else
-  {
-    newIndex = getNumber();
-  }
+//  if (bt)
+//  {
+////    if (bluetoothCommunicator.available())
+////    {
+////      newIndex = bluetoothCommunicator.read() - ASCII_OFFSET;
+////    }
+//  }
+//  else
+//  {
+//    newIndex = getNumber();
+//  }
   
-  if ((newIndex >= 0) && (newIndex < NUMBER_OF_PROGMEMS))
+//  if ((newIndex >= 0) && (newIndex < NUMBER_OF_PROGMEMS))
     {
       for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
         {
-            led[i].setProgmemIndex(newIndex);
+            led[i].setProgmemIndex(getNumber());
         }
     }
 }
@@ -874,16 +874,16 @@ void RgbLedControl::readEeprom(void)
     RgbDefaultProperties content;
     EEPROM.get (0, content);
 
-    content.number_of_plays;
-    content.play_at_por;
-    content.number_of_leds;
-    content.format_of_numbers;
-    content.language;
+    numberOfPlays = content.number_of_plays;
+    defaultPlayOfLight = content.play_at_por;
+//    number_of_leds_ = content.number_of_leds;
+//    format_of_numbers_ = content.format_of_numbers;
+//    language_ = content.language;
   }
 
 void RgbLedControl::readEeprom(uint8_t play)
 {
-  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties));
+  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties) * NUMBER_OF_LEDS);
   uint8_t address = addressStart;
 
   Serial.print(F("Current play of light: "));
@@ -922,14 +922,20 @@ void RgbLedControl::readEeprom(uint8_t play)
 
 void RgbLedControl::writeEeprom(void)
 {
-  EEPROM.write(ADDRESS_NUMBER_OF_DEFAULT_PLAY, playOfLight);
-  EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
+    RgbDefaultProperties content;
+    EEPROM.get (0, content);
+
+    numberOfPlays = content.number_of_plays;
+    content.play_at_por;
+    content.number_of_leds;
+    content.format_of_numbers;
+    content.language;
 }
 
 void RgbLedControl::writeEeprom(uint8_t play)
 {
   uint8_t content;
-  uint8_t addressStart = 2 + play * (LENGTH_OF_PLAY_PROPERTIES);
+  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * sizeof(LedDefaultProperties) * NUMBER_OF_LEDS;
   uint8_t address = addressStart;
 
   Serial.print(F("Saving LED properties for Play of Light: "));
@@ -944,77 +950,7 @@ void RgbLedControl::writeEeprom(uint8_t play)
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      Serial.println(address);
-      content = led[i].getOffset();
-      EEPROM.write(address, content);
-      Serial.print(F("Offset: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getProgmemIndex();
-      EEPROM.write(address, content);
-      Serial.print(F("Progmem Index"));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getDimmable();
-      EEPROM.write(address, content);
-      Serial.print("Dimmable: ");
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = led[i].getMinPointer();
-      EEPROM.write(address, content);
-      Serial.print(F("Min. Pointer: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = led[i].getMaxPointer();
-      EEPROM.write(address, content);
-      Serial.print(F("Max. Pointer: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getNewFactor();
-      EEPROM.write(address, content);
-      Serial.print(F("New Factor: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getNewMinPointerAtMax();
-      EEPROM.write(address, content);
-      Serial.print(F("New min pointer at max: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getNewMaxPointerAtMin();
-      EEPROM.write(address, content);
-      Serial.print(F("New max pointer at min: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getWaitAtMin();
-      EEPROM.write(address, content);
-      Serial.print(F("Wait at min: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println(address);
-      content = (uint8_t)led[i].getWaitAtMax();
-      EEPROM.write(address, content);
-      Serial.print(F("Wait at max: "));
-      Serial.println(content);
-      address ++;
-
-      Serial.println();
+      led[i].saveToEeprom(address + i * sizeof(LedDefaultProperties));
     }
 }
 
