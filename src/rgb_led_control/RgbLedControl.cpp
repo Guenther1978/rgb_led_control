@@ -935,7 +935,7 @@ void RgbLedControl::writeEeprom(void)
 void RgbLedControl::writeEeprom(uint8_t play)
 {
   uint8_t content;
-  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * sizeof(LedDefaultProperties) * NUMBER_OF_LEDS;
+  uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties) * NUMBER_OF_LEDS);
   uint8_t address = addressStart;
 
   Serial.print(F("Saving LED properties for Play of Light: "));
