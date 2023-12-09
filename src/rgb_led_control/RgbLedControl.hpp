@@ -50,6 +50,7 @@ struct RgbDefaultProperties {
   uint8_t number_of_leds;
   unsigned char format_of_numbers;
   unsigned char language;
+  unsigned char button_pressed;
 };
 
 const uint8_t pins[6] {3, 5, 6, 9, 10, 11};

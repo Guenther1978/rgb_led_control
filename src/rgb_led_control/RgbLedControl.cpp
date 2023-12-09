@@ -348,6 +348,7 @@ void RgbLedControl::setDefaultPlayOfLight(bool bt)
         if (incomingByte < numberOfPlays)
           {
             defaultPlayOfLight = incomingByte;
+            writeEeprom();
           }
       }
 
@@ -373,7 +374,7 @@ void RgbLedControl::setNumberOfPlays(void)
       {
         numberOfPlays = incomingByte;
       }
-    EEPROM.write(ADDRESS_NUMBER_OF_PLAYS, numberOfPlays);
+    writeEeprom();
   }
 
 
@@ -923,13 +924,15 @@ void RgbLedControl::readEeprom(uint8_t play)
 void RgbLedControl::writeEeprom(void)
 {
     RgbDefaultProperties content;
-    EEPROM.get (0, content);
 
-    numberOfPlays = content.number_of_plays;
-    content.play_at_por;
+    content.number_of_plays = numberOfPlays;
+    content.play_at_por = defaultPlayOfLight;
     content.number_of_leds;
     content.format_of_numbers;
     content.language;
+    content.button_pressed;
+
+    EEPROM.put (0, content);
 }
 
 void RgbLedControl::writeEeprom(uint8_t play)
