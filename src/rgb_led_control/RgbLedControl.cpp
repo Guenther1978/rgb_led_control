@@ -335,7 +335,7 @@ void RgbLedControl::setPlayOfLight(bool bt)
         incomingByte = (byte)getNumber();
         if (incomingByte < numberOfPlays)
           {
-            playOfLight = incomingByte;
+            playOfLight = incomingByte - 1;
           }
       }
 
