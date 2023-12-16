@@ -159,7 +159,7 @@ void Led::setDimmable(bool dimmable)
     _dimmable = dimmable;
     if (_dimmable == false)
       {
-          _factor = _defaultFactor;
+          _dimm_factor = _defaultFactor;
           _pointerMin = _defaultPointerMin;
           _pointerMax = _defaultPointerMax;
       }
@@ -184,22 +184,22 @@ void Led::setLedIsOn(bool led_is_on)
 
 uint8_t Led::getFactor()
 {
-  return _dimmfactor;
+  return _dimm_factor;
 }
 
 void Led::setFactor(uint8_t factor)
 {
-  _dimmfactor = factor;
+  _dimm_factor = factor;
 }
 
 uint8_t Led::getColorFactor()
 {
-  return _colorFactor;
+  return _color_factor;
 }
 
 void Led::setColorFactor(uint8_t factor)
 {
-  _colorFactor = factor;
+  _color_factor = factor;
 }
 
 
@@ -463,10 +463,10 @@ void Led8bit::pointer2int()
       break;
     }
 
-  product = (uint8_t)(255 - content) * _dimmFactor >> 8;
+  product = (uint8_t)(255 - content) * _dimm_factor >> 8;
   sum = (255 -  product) * (255 - _offset) >> 8;
   sum += _offset;
-  _intensity = (uint8_t)_colorfactor * sum >> 8;
+  _intensity = (uint8_t)_color_factor * sum >> 8;
 }
 
 void Led8bit::int2output(void)
@@ -520,8 +520,8 @@ void Led16bit::pointer2int()
     }
 
   product = (0x0FFF - content);
-  product *= _factor;
+  product *= _dimm_factor;
   product = product >> 8;
   sum = 0x0FFF -  product;
-  _intensity = (uint16_t)sum;
+  _intensity = (uint16_t)sum * _color_factor;
 }

@@ -57,8 +57,8 @@ protected:
   uint8_t _number = 0;
   uint8_t _progmemIndex = 0;
   uint8_t _pointer = 0;
-  uint8_t _dimmfactor = 0xFF;
-  uint8_t _colorFactor = 0xFF;
+  uint8_t _dimm_factor = 0xFF;
+  uint8_t _color_factor = 0xFF;
   uint8_t _offset = 0;
 
 public:
