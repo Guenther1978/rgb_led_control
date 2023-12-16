@@ -19,6 +19,7 @@ const uint8_t kBitNewMinPointerAtMax = 0x04;
 const uint8_t kBitNewMaxPointerAtMin = 0x08;
 const uint8_t kBitWaitAtMin = 0x10;
 const uint8_t kBitWaitAtMax = 0x20;
+const uint8_t kBitLedIsOn = 0x40;
 
 const uint8_t pwmPins[] = {3, 5, 6, 9, 10, 11};
 
@@ -50,12 +51,13 @@ private:
   bool _pointerIsAtMin = false;
   bool _pointerIsChangeable = true;
   bool _dimmable = true;
+  bool _led_is_on = true;
 
 protected:
   uint8_t _number = 0;
   uint8_t _progmemIndex = 0;
   uint8_t _pointer = 0;
-  uint8_t _factor = 0xFF;
+  uint8_t _dimmfactor = 0xFF;
   uint8_t _colorFactor = 0xFF;
   uint8_t _offset = 0;
 
@@ -190,6 +192,12 @@ public:
 
   /** @param changePointer */
   void setDimmable(bool);
+
+  /** @return changePointer */
+  bool getLedIsOn(void);
+
+  /** @param changePointer */
+  void setLedIsOn(bool);
 
   
   // factors

@@ -72,95 +72,107 @@ void RgbLedControl::loop()
               led[i].setPointer(0xff);
             }
           readEeprom(playOfLight);
+          for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+            {
+              if (led[i].getLedIsOn()) {
+                led[i].setIntensity(0xFF);
+              }
+              else {
+                led[i].setIntensity(0x00);
+              }
+              led[i].int2output();
+            }
         }
     }
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i ++)
   {
-    led[i].pointer2int();
+    if (led[i].getDimmable())
+      {
+        if (led[i].letSpeedControlCount())
+        {
+          led[i].changePointer();
+          led[i].pointer2int();
+          if (led[i].getDarkerHasChanged())
+          {
+            led[i].setSpeedControlDuration(random(DURATION_MAX) + 1);
+            if (led[i].getPointerIsAtMax())
+              {
+                if (led[i].getNewFactor())
+                  {
+                    led[i].setFactor((uint8_t)random(0xFF));
+                  }
+                if (led[i].getNewMinPointerAtMax())
+                  {
+                    uint8_t number = (uint8_t)random(0xFF);
+                    if (number < led[i].getPointer())
+                      {
+                        led[i].setMinPointer(number);
+                      }
+                  }
+                if (led[i].getWaitAtMax())
+                  {
+                    if (random(2))
+                      {
+                        for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
+                          {
+                            if (j == i)
+                              {
+                                led[j].setPointerIsChangeable(false);
+                              }
+                            else
+                              {
+                                if (!(led[j].getPointerIsAtMin()))
+                                  {
+                                    led[j].setPointerIsChangeable(true);
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+            else if (led[i].getPointerIsAtMin())
+              {
+                if (led[i].getNewFactor())
+                  {
+                    led[i].setFactor((uint8_t)random(0xFF));
+                  }
+                if (led[i].getNewMaxPointerAtMin())
+                  {
+                    uint8_t number = (uint8_t)random(0xFF);
+                    if (number > led[i].getPointer())
+                      {
+                        led[i].setMaxPointer(number);
+                      }
+                  }
+                if (led[i].getWaitAtMin())
+                  {
+                    if (random(2))
+                      {
+                        for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
+                          {
+                            if (j == i)
+                              {
+                                led[j].setPointerIsChangeable(false);
+                              }
+                            else
+                              {
+                                if (!(led[j].getPointerIsAtMax()))
+                                  {
+                                    led[j].setPointerIsChangeable(true);
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+       }
+    }
     #ifdef PCA9685
     pwm.setPWM(led[i].getNumber(), 0, led[i].getIntensity());
     #else
     led[i].int2output();
     #endif
-    if (led[i].letSpeedControlCount())
-    {
-      led[i].changePointer();
-      led[i].pointer2int();
-      if (led[i].getDarkerHasChanged())
-      {
-        led[i].setSpeedControlDuration(random(DURATION_MAX) + 1);
-        if (led[i].getPointerIsAtMax())
-          {
-            if (led[i].getNewFactor())
-              {
-                led[i].setFactor((uint8_t)random(0xFF));
-              }
-            if (led[i].getNewMinPointerAtMax())
-              {
-                uint8_t number = (uint8_t)random(0xFF);
-                if (number < led[i].getPointer())
-                  {
-                    led[i].setMinPointer(number);
-                  }
-              }
-            if (led[i].getWaitAtMax())
-              {
-                if (random(2))
-                  {
-                    for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
-                      {
-                        if (j == i)
-                          {
-                            led[j].setPointerIsChangeable(false);
-                          }
-                        else
-                          {
-                            if (!(led[j].getPointerIsAtMin()))
-                              {
-                                led[j].setPointerIsChangeable(true);
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-        else if (led[i].getPointerIsAtMin())
-          {
-            if (led[i].getNewFactor())
-              {
-                led[i].setFactor((uint8_t)random(0xFF));
-              }
-            if (led[i].getNewMaxPointerAtMin())
-              {
-                uint8_t number = (uint8_t)random(0xFF);
-                if (number > led[i].getPointer())
-                  {
-                    led[i].setMaxPointer(number);
-                  }
-              }
-            if (led[i].getWaitAtMin())
-              {
-                if (random(2))
-                  {
-                    for (uint8_t j = 0; j < NUMBER_OF_LEDS; j ++)
-                      {
-                        if (j == i)
-                          {
-                            led[j].setPointerIsChangeable(false);
-                          }
-                        else
-                          {
-                            if (!(led[j].getPointerIsAtMax()))
-                              {
-                                led[j].setPointerIsChangeable(true);
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
-    }
   }
   loopDuration = millis() - oldMillis;
   while (millis() < (oldMillis + cycleTime));
@@ -179,6 +191,8 @@ void RgbLedControl::loop()
             break;
           case 'b':
           case 'B':
+            setLedIsOn();
+            info();
             break;
           case 'c':
           case 'C':
@@ -332,6 +346,16 @@ void RgbLedControl::setPlayOfLight(bool bt)
         led[i].setPointer(0xff);
       }
     readEeprom(playOfLight);
+    for (int i = 0; i < NUMBER_OF_LEDS; i ++)
+      {
+        if (led[i].getLedIsOn()) {
+          led[i].setIntensity(0xFF);
+        }
+        else {
+          led[i].setIntensity(0x00);
+        }
+        led[i].int2output();
+      }
   }
 
 unsigned char RgbLedControl::getDefaultPlayOfLight(void)
@@ -451,7 +475,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax"));
+  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax\tOn"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -459,7 +483,9 @@ void RgbLedControl::info()
       Serial.print("\t\t");
       Serial.print(led[i].getNewMaxPointerAtMin());
       Serial.print("\t\t\t");
-      Serial.println(led[i].getNewMinPointerAtMax());
+      Serial.print(led[i].getNewMinPointerAtMax());
+      Serial.print("\t\t");
+      Serial.println(led[i].getLedIsOn());
     }
 
   Serial.println();
@@ -482,7 +508,7 @@ void RgbLedControl::info()
   Serial.print(F("number of play of lights:\t"));
   Serial.println(numberOfPlays);
   Serial.print(F("Play of light:\t"));
-  Serial.println(playOfLight);
+  Serial.println(playOfLight + 1);
   Serial.println();
 }
 
@@ -712,14 +738,50 @@ void RgbLedControl::setDimmable(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setDimmable(getBoolean());
+      if (getBoolean())
+        {
+          led[i].setDimmable(true);
+        }
+      else
+        {
+          led[i].setDimmable(false);
+          led[i].setIntensity(17 * getNumber());
+          led[i].int2output();
+        }
     }
 }
+
+void RgbLedControl::setLedIsOn(void)
+{
+  for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
+    {
+      if (getBoolean())
+        {
+          led[i].setLedIsOn(true);
+        }
+      else
+        {
+          led[i].setLedIsOn(false);
+          led[i].setDimmable(false);
+          led[i].setIntensity(0);
+          led[i].int2output();
+        }
+    }
+}
+
 void RgbLedControl::setWaitAtMin(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setWaitAtMin(getBoolean());
+      if (getBoolean())
+        {
+          led[i].setWaitAtMin(true);
+        }
+      else
+        {
+          led[i].setWaitAtMin(false);
+          led[i].setPointerIsChangeable(true);
+        }
     }
 }
 
@@ -727,7 +789,15 @@ void RgbLedControl::setWaitAtMax(void)
 {
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
-      led[i].setWaitAtMax(getBoolean());
+      if (getBoolean())
+        {
+          led[i].setWaitAtMax(true);
+        }
+      else
+        {
+          led[i].setWaitAtMax(false);
+          led[i].setPointerIsChangeable(true);
+        }
     }
 }
 
