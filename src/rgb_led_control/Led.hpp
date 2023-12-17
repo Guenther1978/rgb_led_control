@@ -27,6 +27,7 @@ struct LedDefaultProperties {
   uint8_t default_booleans;
   uint8_t progmem_index;
   uint8_t factor;
+  uint8_t offset;
   uint8_t pointer_min;
   uint8_t pointer_max;
 };

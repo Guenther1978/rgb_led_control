@@ -332,9 +332,7 @@ void Led::saveToEeprom(uint8_t address) {
   }
   else {
     content.default_booleans &= ~kBitNewMaxPointerAtMin;
-  }
-
-  if (_waitAtMin) {
+  }  if (_waitAtMin) {
     content.default_booleans |= kBitWaitAtMin;
   }
   else {
@@ -350,6 +348,7 @@ void Led::saveToEeprom(uint8_t address) {
 
   content.progmem_index = _progmemIndex;
   content.factor = _color_factor;
+  content.offset = _offset;
   content.pointer_min = _defaultPointerMin;
   content.pointer_max = _defaultPointerMax;
 
@@ -369,6 +368,7 @@ void Led::loadFromEeprom(uint8_t address) {
   _led_is_on = content.default_booleans & kBitLedIsOn;
   _progmemIndex = content.progmem_index;
   _color_factor = content.factor;
+  _offset = content.offset;
   _defaultPointerMin = content.pointer_min;
   _defaultPointerMax = content.pointer_max;
 }

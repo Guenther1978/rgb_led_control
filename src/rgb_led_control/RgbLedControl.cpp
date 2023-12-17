@@ -24,6 +24,12 @@ void RgbLedControl::setup()
 
   Serial.begin(9600);
   while (!Serial);
+  Serial.print(F("Size of RGB Control default properties: "));
+  Serial.println(sizeof(RgbDefaultProperties));
+  Serial.print(F("Siye of Led default properties: "));
+  Serial.println(sizeof(LedDefaultProperties));
+  Serial.print(F("Size of play of light: "));
+  Serial.println((1 + NUMBER_OF_LEDS * sizeof(LedDefaultProperties)));
   Serial.println("Setup completed");
   Serial.println();
 
@@ -702,34 +708,33 @@ void RgbLedControl::setIndex(bool bt)
     {
       for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
         {
-            led[i].setProgmemIndex(getNumber());
+            led[i].setProgmemIndex(17 * getNumber());
         }
     }
 }
 
 void RgbLedControl::setOffset(bool bt)
   {
-    uint8_t newOffset= 0;
-    byte incomingByte = ' ';
+//    uint8_t newOffset= 0;
+//    byte incomingByte = ' ';
+//
+//    if (bt)
+//    {
+////      if (bluetoothCommunicator.available())
+////      {
+////        incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
+////      }
+//    }
+//    else
+//    {
+//      incomingByte = getNumber();
+//    }
 
-    if (bt)
-    {
-//      if (bluetoothCommunicator.available())
-//      {
-//        incomingByte = bluetoothCommunicator.read() - ASCII_OFFSET;
-//      }
-    }
-    else
-    {
-      incomingByte = getNumber();
-    }
-
-    if ((incomingByte >= 0) && (incomingByte < 16))
+//    if ((incomingByte >= 0) && (incomingByte < 16))
       {
-        newOffset = incomingByte * 6;
         for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
           {
-              led[i].setOffset(newOffset);
+              led[i].setOffset(getNumber());
           }
       }
   }
