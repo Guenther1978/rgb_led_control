@@ -138,10 +138,10 @@ void RgbLedControl::loop()
               }
             else if (led[i].getPointerIsAtMin())
               {
-                if (led[i].getNewFactor())
-                  {
-                    led[i].setFactor((uint8_t)random(0xFF));
-                  }
+//                if (led[i].getNewFactor())
+//                  {
+//                    led[i].setFactor((uint8_t)random(0xFF));
+//                  }
                 if (led[i].getNewMaxPointerAtMin())
                   {
                     uint8_t number = (uint8_t)random(0xFF);
@@ -481,7 +481,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax\tOn"));
+  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax\t\tOn"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -734,7 +734,7 @@ void RgbLedControl::setOffset(bool bt)
       {
         for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
           {
-              led[i].setOffset(getNumber());
+              led[i].setOffset(17 * getNumber());
           }
       }
   }
