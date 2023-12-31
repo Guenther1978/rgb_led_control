@@ -245,6 +245,7 @@ void RgbLedControl::loop()
           case 'l':
           case 'L':
             changeLoopDuration(false);
+            info();
             break;
           case 'm':
           case 'M':
@@ -272,10 +273,12 @@ void RgbLedControl::loop()
           case 'r':
           case 'R':
       	    setMinPointer();
+            info();
             break;
           case 's':
           case 'S':
             setMaxPointer();
+            info();
             break;
           case 't':
           case 'T':
@@ -481,7 +484,7 @@ void RgbLedControl::info()
     }
 
   Serial.println();
-  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax\t\tOn"));
+  Serial.println(F("newFactor\tnewMaxPointerAtMin\tnewMinPointerAtMax\tOn"));
 
   for(int i = 0; i < NUMBER_OF_LEDS; i++)
     {
@@ -490,7 +493,7 @@ void RgbLedControl::info()
       Serial.print(led[i].getNewMaxPointerAtMin());
       Serial.print("\t\t\t");
       Serial.print(led[i].getNewMinPointerAtMax());
-      Serial.print("\t\t");
+      Serial.print("\t\t\t");
       Serial.println(led[i].getLedIsOn());
     }
 
@@ -708,7 +711,7 @@ void RgbLedControl::setIndex(bool bt)
     {
       for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
         {
-            led[i].setProgmemIndex(17 * getNumber());
+            led[i].setProgmemIndex(getNumber());
         }
     }
 }
@@ -1001,7 +1004,7 @@ void RgbLedControl::writeEeprom(void)
     RgbDefaultProperties content;
 
     content.number_of_plays = numberOfPlays;
-    content.play_at_por = defaultPlayOfLight;
+    content.play_at_por = playOfLight;
     content.number_of_leds;
     content.format_of_numbers;
     content.language;
