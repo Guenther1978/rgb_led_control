@@ -8,6 +8,7 @@ void RgbLedControl::setup()
   
   // read current default play of light
   readEeprom();
+  playOfLight = defaultPlayOfLight;
 
   // read led properties for default play of light
   readEeprom(playOfLight);
@@ -26,7 +27,7 @@ void RgbLedControl::setup()
   while (!Serial);
   Serial.print(F("Size of RGB Control default properties: "));
   Serial.println(sizeof(RgbDefaultProperties));
-  Serial.print(F("Siye of Led default properties: "));
+  Serial.print(F("Size of Led default properties: "));
   Serial.println(sizeof(LedDefaultProperties));
   Serial.print(F("Size of play of light: "));
   Serial.println((1 + NUMBER_OF_LEDS * sizeof(LedDefaultProperties)));
@@ -289,6 +290,7 @@ void RgbLedControl::loop()
             break;
           case 'v':
           case 'V':
+            defaultPlayOfLight = playOfLight;
             writeEeprom();
             info();
             break;
@@ -516,6 +518,8 @@ void RgbLedControl::info()
   Serial.println(cycleTime);
   Serial.print(F("number of play of lights:\t"));
   Serial.println(numberOfPlays);
+  Serial.print(F("Default play of light:\t"));
+  Serial.println(defaultPlayOfLight + 1);
   Serial.print(F("Play of light:\t"));
   Serial.println(playOfLight + 1);
   Serial.println();
@@ -996,6 +1000,7 @@ void RgbLedControl::readEeprom(uint8_t play)
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
     {
       led[i].loadFromEeprom(address + i * sizeof(LedDefaultProperties));
+      led[i].pointer2int();
     }
 }
 
@@ -1004,7 +1009,7 @@ void RgbLedControl::writeEeprom(void)
     RgbDefaultProperties content;
 
     content.number_of_plays = numberOfPlays;
-    content.play_at_por = playOfLight;
+    content.play_at_por = defaultPlayOfLight;
     content.number_of_leds;
     content.format_of_numbers;
     content.language;

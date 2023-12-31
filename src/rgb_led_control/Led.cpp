@@ -371,6 +371,13 @@ void Led::loadFromEeprom(uint8_t address) {
   _offset = content.offset;
   _defaultPointerMin = content.pointer_min;
   _defaultPointerMax = content.pointer_max;
+
+  if (_led_is_on) {
+    _pointer = 0xFF;
+  }
+  else {
+    _pointer = 0x00;
+  }
 }
 
 ////////////////////////////////////////////////
