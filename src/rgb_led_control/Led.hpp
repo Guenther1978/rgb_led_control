@@ -339,28 +339,4 @@ public:
   void int2output(void);
 };
 
-class Led16bit : public Led
-{
-private:
-  uint16_t _intensity = 0x0FFF;
-
-public:
-  /** @return intensity */
-  uint16_t getIntensity(void);
-
-  /** @param intensity */
-  void setIntensity(uint16_t);
-
-  /** @brief copy the content of the PROGMEM array to the intensity
-   *
-   * The array with the intensities is included in the header file
-   * 'intensities.h'. This file has been created by the python
-   * script 'progmen_creator.py'.
-   */
-  void pointer2int(void);
-
-  /** @brief send the intensity to the output periphic */
-  void int2output(void);
-};
-
 #endif    // RGB_LED_CONTROL_H_
