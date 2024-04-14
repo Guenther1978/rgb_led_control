@@ -159,9 +159,23 @@ void Led::setDimmable(bool dimmable)
     _dimmable = dimmable;
     if (_dimmable == false)
       {
-          _factor = _defaultFactor;
+          _dimm_factor = _defaultFactor;
           _pointerMin = _defaultPointerMin;
           _pointerMax = _defaultPointerMax;
+      }
+  }
+
+bool Led::getLedIsOn(void)
+  {
+    return _led_is_on;
+  }
+
+void Led::setLedIsOn(bool led_is_on)
+  {
+    _led_is_on = led_is_on;
+    if (!_led_is_on)
+      {
+        _dimmable = false;
       }
   }
 
@@ -170,22 +184,22 @@ void Led::setDimmable(bool dimmable)
 
 uint8_t Led::getFactor()
 {
-  return _factor;
+  return _dimm_factor;
 }
 
 void Led::setFactor(uint8_t factor)
 {
-  _factor = factor;
+  _dimm_factor = factor;
 }
 
 uint8_t Led::getColorFactor()
 {
-  return _colorFactor;
+  return _color_factor;
 }
 
 void Led::setColorFactor(uint8_t factor)
 {
-  _colorFactor = factor;
+  _color_factor = factor;
 }
 
 
@@ -299,6 +313,13 @@ void Led::saveToEeprom(uint8_t address) {
     content.default_booleans &= ~kBitNewFactor;
   }
 
+  if (_led_is_on) {
+    content.default_booleans |= kBitLedIsOn;
+  }
+  else {
+    content.default_booleans &= ~kBitLedIsOn;
+  }
+
   if (_newMinPointerAtMax) {
     content.default_booleans |= kBitNewMinPointerAtMax;
   }
@@ -311,9 +332,7 @@ void Led::saveToEeprom(uint8_t address) {
   }
   else {
     content.default_booleans &= ~kBitNewMaxPointerAtMin;
-  }
-
-  if (_waitAtMin) {
+  }  if (_waitAtMin) {
     content.default_booleans |= kBitWaitAtMin;
   }
   else {
@@ -328,7 +347,8 @@ void Led::saveToEeprom(uint8_t address) {
   }
 
   content.progmem_index = _progmemIndex;
-  content.factor = _defaultFactor;
+  content.factor = _color_factor;
+  content.offset = _offset;
   content.pointer_min = _defaultPointerMin;
   content.pointer_max = _defaultPointerMax;
 
@@ -345,8 +365,10 @@ void Led::loadFromEeprom(uint8_t address) {
   _newMaxPointerAtMin = content.default_booleans & kBitNewMaxPointerAtMin;
   _waitAtMin = content.default_booleans & kBitWaitAtMin;
   _waitAtMax = content.default_booleans & kBitWaitAtMax;
+  _led_is_on = content.default_booleans & kBitLedIsOn;
   _progmemIndex = content.progmem_index;
-  _defaultFactor = content.factor;
+  _color_factor = content.factor;
+  _offset = content.offset;
   _defaultPointerMin = content.pointer_min;
   _defaultPointerMax = content.pointer_max;
 }
@@ -442,10 +464,10 @@ void Led8bit::pointer2int()
       break;
     }
 
-  product = (uint8_t)(255 - content) * _colorFactor >> 8;
+  product = (uint8_t)(255 - content) * _dimm_factor >> 8;
   sum = (255 -  product) * (255 - _offset) >> 8;
   sum += _offset;
-  _intensity = (uint8_t)_factor * sum >> 8;
+  _intensity = (uint8_t)_color_factor * sum >> 8;
 }
 
 void Led8bit::int2output(void)
