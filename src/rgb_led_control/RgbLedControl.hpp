@@ -5,16 +5,16 @@
 
 #include <stdint.h>
 #include <Arduino.h>
-#include <Wire.h>
+//#include <Wire.h>
 #include <EEPROM.h>
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 #include "Led.hpp"
 #include "SpeedControl.hpp"
 #include "PwmSource.h"
 #include "Button.hpp"
 
 #ifdef PCA9685
-#include <Adafruit_PWMServoDriver.h>
+//#include <Adafruit_PWMServoDriver.h>
 #endif
 
 /* Constants for EEPROM  */
@@ -207,9 +207,6 @@ public:
   /**@brief This method calls probertiesOfLed with index of the red LED */
   void redLED(void);
 
-  /**@brief This method initilizes the properties of the LED */
-  void propertiesOfLed(uint8_t);
-
   /**@brief Reads the play of light at start from the EEPROM. */
   void readEeprom(void);
 
@@ -229,14 +226,6 @@ public:
    * than this mehtod should be called with the
    */
   void writeEeprom(uint8_t);
-
-  /**@brief This method test all LEDs
-   *
-   * At lower intensities the decreases or increases can be
-   * seen. With this method a new minimum value can be defined,
-   * that it is more fluent.
-   */
-  void testAllLeds(void);
 
 };
 
