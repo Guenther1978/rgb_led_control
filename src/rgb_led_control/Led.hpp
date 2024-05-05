@@ -2,7 +2,7 @@
 #define RGBLEDCONTROL_LED_H_
 
 #include <Arduino.h>
-#include <Wire.h>
+//#include <Wire.h>
 #include "intensities.h"
 #include "SpeedControl.hpp"
 #include "PwmSource.h"

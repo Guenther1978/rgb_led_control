@@ -447,18 +447,7 @@ void Led8bit::pointer2int()
     case 1:
       content = pgm_read_word_near(intensities_8bit_1 + _pointer);
       break;
-    case 2:
-      content = pgm_read_word_near(intensities_8bit_2 + _pointer);
-      break;
-    case 3:
-      content = pgm_read_word_near(intensities_8bit_3 + _pointer);
-      break;
-    case 4:
-      content = pgm_read_word_near(intensities_8bit_4 + _pointer);
-      break;
-    case 5:
-      content = pgm_read_word_near(intensities_8bit_5 + _pointer);
-      break;
+
 
     default:
       break;
@@ -474,4 +463,3 @@ void Led8bit::int2output(void)
 {
   analogWrite(_pin, _intensity);
 }
-
