@@ -18,9 +18,9 @@ void RgbLedControl::setup()
 
   Serial.begin(9600);
   while (!Serial);
-  Serial.print(F("Size of RGB Control default properties: "));
+  Serial.print(F("Size of RGB Control struct: "));
   Serial.println(sizeof(RgbDefaultProperties));
-  Serial.print(F("Siye of Led default properties: "));
+  Serial.print(F("Siye of Led struct: "));
   Serial.println(sizeof(LedDefaultProperties));
   Serial.print(F("Size of play of light: "));
   Serial.println((1 + NUMBER_OF_LEDS * sizeof(LedDefaultProperties)));
@@ -423,8 +423,6 @@ void RgbLedControl::help()
   Serial.println(F("q: default play of ligth"));
   Serial.println(F("r: min pointer"));
   Serial.println(F("s: max pointer"));
-  Serial.println(F("t: Test all LEDs"));
-  Serial.println(F("u: global factor"));
   Serial.println(F("v: Start with current play of light"));
   Serial.println(F("w: Save current properties"));
 //  Serial.println("x: ");
@@ -839,7 +837,7 @@ void RgbLedControl::readEeprom(uint8_t play)
 {
   uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties) * NUMBER_OF_LEDS);
   uint8_t address = addressStart;
-
+/*
   Serial.print(F("Current play of light: "));
   Serial.println(playOfLight);
   Serial.println();
@@ -858,14 +856,14 @@ void RgbLedControl::readEeprom(uint8_t play)
   Serial.println(addressStart);
 
   Serial.println(F("Reading LED proberties from the EEPROM..."));
-  Serial.println(address);
+  Serial.println(address);*/
   cycleTime = (unsigned long)EEPROM.read(address + OFFSET_LOOP_DURATION);
   if ((cycleTime == 0xFF) || (cycleTime == 0))
     {
       cycleTime = (unsigned long)DELAY_TIME;
     }
-  Serial.print(F("Time per cycle"));
-  Serial.println(cycleTime);
+//  Serial.print(F("Time per cycle"));
+//  Serial.println(cycleTime);
   address ++;
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
@@ -893,15 +891,15 @@ void RgbLedControl::writeEeprom(uint8_t play)
   uint8_t content;
   uint8_t addressStart = sizeof(RgbDefaultProperties) + play * (1 + sizeof(LedDefaultProperties) * NUMBER_OF_LEDS);
   uint8_t address = addressStart;
-
+/*
   Serial.print(F("Saving LED properties for Play of Light: "));
   Serial.println(play);
   Serial.println();
 
-  Serial.println(address);
+  Serial.println(address);*/
   EEPROM.write(address + OFFSET_LOOP_DURATION, (uint8_t)cycleTime);
-  Serial.print(F("Time per cycle: "));
-  Serial.println(cycleTime);
+/*  Serial.print(F("Time per cycle: "));
+  Serial.println(cycleTime);*/
   address ++;
 
   for (uint8_t i = 0; i < NUMBER_OF_LEDS; i++)
@@ -909,4 +907,3 @@ void RgbLedControl::writeEeprom(uint8_t play)
       led[i].saveToEeprom(address + i * sizeof(LedDefaultProperties));
     }
 }
-
